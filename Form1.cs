@@ -3,6 +3,8 @@ using QuanLyNhanSu.NhanVien;
 using System;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using QuanLyNhanSu.Common;
+
 using static System.Collections.Specialized.BitVector32;
 
 
@@ -11,8 +13,6 @@ namespace QuanLyNhanSu
     public partial class Form1 : Form
 
     {
-        private string connectString =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
 
         public Form1()
         {
@@ -43,7 +43,8 @@ namespace QuanLyNhanSu
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
+
                 {
                     conn.Open();
 
@@ -116,7 +117,8 @@ namespace QuanLyNhanSu
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = new SqlConnection(connectString))
+            using (SqlConnection conn = DbConnectionFactory.CreateConnection())
+
             {
                 conn.Open();
 
