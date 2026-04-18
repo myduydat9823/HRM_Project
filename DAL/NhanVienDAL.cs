@@ -31,6 +31,8 @@ namespace QuanLyNhanSu.DAL
                         Ten_phong_ban,
                         Luong_co_ban,
                         Tinh_trang,
+                        So_tai_khoan,
+                        Ten_ngan_hang,
                         Anh_nv
                     FROM NHAN_VIEN
                     ORDER BY Ma_nhan_vien";
@@ -66,6 +68,8 @@ namespace QuanLyNhanSu.DAL
                         Ten_phong_ban,
                         Luong_co_ban,
                         Tinh_trang,
+                        So_tai_khoan,
+                        Ten_ngan_hang,
                         Anh_nv
                     FROM NHAN_VIEN
                     WHERE 1 = 1";
@@ -161,6 +165,8 @@ namespace QuanLyNhanSu.DAL
                         Ten_phong_ban,
                         Luong_co_ban,
                         Tinh_trang,
+                        So_tai_khoan,
+                        Ten_ngan_hang,
                         Anh_nv
                     )
                     VALUES
@@ -180,6 +186,8 @@ namespace QuanLyNhanSu.DAL
                         @Ten_phong_ban,
                         @Luong_co_ban,
                         @Tinh_trang,
+                        @So_tai_khoan,
+                        @Ten_ngan_hang,
                         @Anh_nv
                     )";
 
@@ -200,6 +208,8 @@ namespace QuanLyNhanSu.DAL
                     cmd.Parameters.AddWithValue("@Ten_phong_ban", employee.TenPhongBan);
                     cmd.Parameters.AddWithValue("@Luong_co_ban", employee.LuongCoBan);
                     cmd.Parameters.AddWithValue("@Tinh_trang", employee.TinhTrang);
+                    cmd.Parameters.AddWithValue("@So_tai_khoan", string.IsNullOrWhiteSpace(employee.SoTaiKhoan) ? (object)DBNull.Value : employee.SoTaiKhoan);
+                    cmd.Parameters.AddWithValue("@Ten_ngan_hang", string.IsNullOrWhiteSpace(employee.TenNganHang) ? (object)DBNull.Value : employee.TenNganHang);
 
                     if (string.IsNullOrWhiteSpace(employee.AnhNv))
                         cmd.Parameters.AddWithValue("@Anh_nv", DBNull.Value);
@@ -234,6 +244,8 @@ namespace QuanLyNhanSu.DAL
                         Ten_phong_ban = @Ten_phong_ban,
                         Luong_co_ban = @Luong_co_ban,
                         Tinh_trang = @Tinh_trang,
+                        So_tai_khoan = @So_tai_khoan,
+                        Ten_ngan_hang = @Ten_ngan_hang,
                         Anh_nv = @Anh_nv
                     WHERE Ma_nhan_vien = @Ma_nhan_vien";
 
@@ -254,6 +266,8 @@ namespace QuanLyNhanSu.DAL
                     cmd.Parameters.AddWithValue("@Ten_phong_ban", employee.TenPhongBan);
                     cmd.Parameters.AddWithValue("@Luong_co_ban", employee.LuongCoBan);
                     cmd.Parameters.AddWithValue("@Tinh_trang", employee.TinhTrang);
+                    cmd.Parameters.AddWithValue("@So_tai_khoan", string.IsNullOrWhiteSpace(employee.SoTaiKhoan) ? (object)DBNull.Value : employee.SoTaiKhoan);
+                    cmd.Parameters.AddWithValue("@Ten_ngan_hang", string.IsNullOrWhiteSpace(employee.TenNganHang) ? (object)DBNull.Value : employee.TenNganHang);
 
                     if (string.IsNullOrWhiteSpace(employee.AnhNv))
                         cmd.Parameters.AddWithValue("@Anh_nv", DBNull.Value);

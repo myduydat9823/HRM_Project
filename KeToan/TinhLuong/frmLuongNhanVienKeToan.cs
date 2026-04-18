@@ -1,0 +1,538 @@
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Windows.Forms;
+using static System.Collections.Specialized.BitVector32;
+
+namespace QuanLyNhanSu.KeToan.TinhLuong
+{
+    public partial class frmLuongNhanVienKeToan : Form
+    {
+        private readonly string connectString =
+            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
+
+        private bool isProcessing = false;
+
+        public frmLuongNhanVienKeToan()
+        {
+            InitializeComponent();
+
+            this.Load += frmLuongNhanVienKeToan_Load;
+            btnTinhLuong.Click += btnTinhLuong_Click;
+            btnLoc.Click += btnLoc_Click;
+            btnTaiLai.Click += btnTaiLai_Click;
+        }
+
+        private void frmLuongNhanVienKeToan_Load(object sender, EventArgs e)
+        {
+            if (!HasSalaryPermission())
+            {
+                this.Close();
+                return;
+            }
+
+            LoadEmployeeCombobox();
+            LoadMonthCombobox();
+            LoadYearCombobox();
+            SetCurrentMonthYear();
+
+            LoadSalaryData();
+            ConfigureDataGridView();
+        }
+
+        private bool HasSalaryPermission()
+        {
+            if (session.MaQuyen != 1 && session.MaQuyen != 3)
+            {
+                MessageBox.Show("Bạn không có quyền truy cập chức năng lương.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void SetActionButtonsEnabled(bool enabled)
+        {
+            btnTinhLuong.Enabled = enabled;
+            btnLoc.Enabled = enabled;
+            btnTaiLai.Enabled = enabled;
+        }
+
+        private void LoadEmployeeCombobox()
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectString))
+                {
+                    conn.Open();
+
+                    string query = @"
+                        SELECT
+                            Ma_nhan_vien,
+                            Ten_nhan_vien,
+                            CAST(Ma_nhan_vien AS NVARCHAR(20)) + N' - ' + Ten_nhan_vien AS Hien_thi
+                        FROM NHAN_VIEN
+                        WHERE Tinh_trang = N'Đang làm'
+                        ORDER BY Ten_nhan_vien";
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    DataRow rowAll = dt.NewRow();
+                    rowAll["Ma_nhan_vien"] = DBNull.Value;
+                    rowAll["Ten_nhan_vien"] = "";
+                    rowAll["Hien_thi"] = "-- Tất cả nhân viên --";
+                    dt.Rows.InsertAt(rowAll, 0);
+
+                    cmbNhanVien.DataSource = dt;
+                    cmbNhanVien.DisplayMember = "Hien_thi";
+                    cmbNhanVien.ValueMember = "Ma_nhan_vien";
+                    cmbNhanVien.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tải danh sách nhân viên: " + ex.Message);
+            }
+        }
+
+        private void LoadMonthCombobox()
+        {
+            cmbThang.Items.Clear();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                cmbThang.Items.Add(i);
+            }
+        }
+
+        private void LoadYearCombobox()
+        {
+            cmbNam.Items.Clear();
+
+            int currentYear = DateTime.Now.Year;
+
+            for (int i = currentYear - 5; i <= currentYear + 1; i++)
+            {
+                cmbNam.Items.Add(i);
+            }
+        }
+
+        private void SetCurrentMonthYear()
+        {
+            cmbThang.SelectedItem = DateTime.Now.Month;
+            cmbNam.SelectedItem = DateTime.Now.Year;
+        }
+
+        private void btnTinhLuong_Click(object sender, EventArgs e)
+        {
+            if (!HasSalaryPermission()) return;
+            if (isProcessing) return;
+
+            isProcessing = true;
+            SetActionButtonsEnabled(false);
+
+            SqlConnection conn = null;
+            SqlTransaction tran = null;
+
+            try
+            {
+                if (cmbThang.SelectedItem == null || cmbNam.SelectedItem == null)
+                {
+                    MessageBox.Show("Vui lòng chọn tháng và năm.");
+                    return;
+                }
+
+                int thang = Convert.ToInt32(cmbThang.SelectedItem);
+                int nam = Convert.ToInt32(cmbNam.SelectedItem);
+                int? maNhanVien = null;
+
+                if (cmbNhanVien.SelectedIndex > 0 && cmbNhanVien.SelectedValue != null)
+                {
+                    maNhanVien = Convert.ToInt32(cmbNhanVien.SelectedValue);
+                }
+
+                DialogResult result = MessageBox.Show(
+                    "Bạn có chắc muốn tính lương tháng " + thang + "/" + nam + " không?",
+                    "Xác nhận tính lương",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                if (result == DialogResult.No)
+                    return;
+
+                conn = new SqlConnection(connectString);
+                conn.Open();
+
+                tran = conn.BeginTransaction(IsolationLevel.Serializable);
+
+                DataTable salarySource = GetSalarySourceData(conn, tran, thang, nam, maNhanVien);
+
+                if (salarySource.Rows.Count == 0)
+                {
+                    tran.Rollback();
+                    MessageBox.Show("Không có nhân viên nào để tính lương.");
+                    return;
+                }
+
+                foreach (DataRow row in salarySource.Rows)
+                {
+                    SaveSalaryRow(conn, tran, row, thang, nam);
+                }
+
+                tran.Commit();
+
+                MessageBox.Show("Tính lương thành công.");
+
+                LoadSalaryData();
+                ConfigureDataGridView();
+            }
+            catch (SqlException ex)
+            {
+                if (tran != null)
+                {
+                    try { tran.Rollback(); } catch { }
+                }
+
+                if (ex.Number == 2601 || ex.Number == 2627)
+                {
+                    MessageBox.Show("Dữ liệu lương bị trùng. Mỗi nhân viên chỉ có một bảng lương trong một tháng.");
+                }
+                else
+                {
+                    MessageBox.Show("Lỗi SQL khi tính lương: " + ex.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (tran != null)
+                {
+                    try { tran.Rollback(); } catch { }
+                }
+
+                MessageBox.Show("Lỗi tính lương: " + ex.Message);
+            }
+            finally
+            {
+                if (tran != null) tran.Dispose();
+                if (conn != null) conn.Dispose();
+
+                isProcessing = false;
+                SetActionButtonsEnabled(true);
+            }
+        }
+
+        private DataTable GetSalarySourceData(SqlConnection conn, SqlTransaction tran, int thang, int nam, int? maNhanVien)
+        {
+            string query = @"
+                SELECT
+                    nv.Ma_nhan_vien,
+                    nv.Ten_nhan_vien,
+                    nv.Luong_co_ban,
+                    ISNULL(cv.He_so_luong, 1) AS He_so_luong,
+
+                    nv.Luong_co_ban * ISNULL(cv.He_so_luong, 1) AS Luong_chuc_vu,
+
+                    ISNULL(kt.Tong_thuong_phat, 0) AS Tong_thuong_phat,
+
+                    (nv.Luong_co_ban * ISNULL(cv.He_so_luong, 1))
+                        + ISNULL(kt.Tong_thuong_phat, 0) AS Thuc_nhan
+                FROM NHAN_VIEN nv
+                LEFT JOIN CHUC_VU cv ON nv.Ma_chuc_vu = cv.Ma_chuc_vu
+                LEFT JOIN
+                (
+                    SELECT
+                        Ma_nhan_vien,
+                        SUM(Muc_thuong_phat) AS Tong_thuong_phat
+                    FROM KHEN_THUONG_KY_LUAT
+                    WHERE MONTH(Ngay_lap) = @Thang
+                      AND YEAR(Ngay_lap) = @Nam
+                    GROUP BY Ma_nhan_vien
+                ) kt ON nv.Ma_nhan_vien = kt.Ma_nhan_vien
+                WHERE nv.Tinh_trang = N'Đang làm'";
+
+            if (maNhanVien.HasValue)
+            {
+                query += " AND nv.Ma_nhan_vien = @Ma_nhan_vien";
+            }
+
+            query += " ORDER BY nv.Ten_nhan_vien";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn, tran))
+            {
+                cmd.Parameters.AddWithValue("@Thang", thang);
+                cmd.Parameters.AddWithValue("@Nam", nam);
+
+                if (maNhanVien.HasValue)
+                {
+                    cmd.Parameters.AddWithValue("@Ma_nhan_vien", maNhanVien.Value);
+                }
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                adapter.Fill(dt);
+
+                return dt;
+            }
+        }
+
+        private void SaveSalaryRow(SqlConnection conn, SqlTransaction tran, DataRow row, int thang, int nam)
+        {
+            int maNhanVien = Convert.ToInt32(row["Ma_nhan_vien"]);
+            string tenNhanVien = row["Ten_nhan_vien"].ToString();
+
+            decimal luongCoBan = Convert.ToDecimal(row["Luong_co_ban"]);
+            decimal heSoLuong = Convert.ToDecimal(row["He_so_luong"]);
+            decimal luongChucVu = Convert.ToDecimal(row["Luong_chuc_vu"]);
+            decimal tongThuongPhat = Convert.ToDecimal(row["Tong_thuong_phat"]);
+            decimal thucNhan = Convert.ToDecimal(row["Thuc_nhan"]);
+
+            string query = @"
+                IF EXISTS (
+                    SELECT 1
+                    FROM LUONG WITH (UPDLOCK, HOLDLOCK)
+                    WHERE Ma_nhan_vien = @Ma_nhan_vien
+                      AND Thang = @Thang
+                      AND Nam = @Nam
+                )
+                BEGIN
+                    UPDATE LUONG
+                    SET
+                        Ten_nhan_vien = @Ten_nhan_vien,
+                        Luong_co_ban = @Luong_co_ban,
+                        He_so_luong = @He_so_luong,
+                        Luong_chuc_vu = @Luong_chuc_vu,
+                        Muc_thuong_phat = @Muc_thuong_phat,
+                        Thuc_nhan = @Thuc_nhan,
+                        Ghi_chu = @Ghi_chu
+                    WHERE Ma_nhan_vien = @Ma_nhan_vien
+                      AND Thang = @Thang
+                      AND Nam = @Nam
+                END
+                ELSE
+                BEGIN
+                    INSERT INTO LUONG
+                    (
+                        Ma_luong,
+                        Ma_nhan_vien,
+                        Ten_nhan_vien,
+                        Ma_cham_cong,
+                        Thang,
+                        Nam,
+                        Luong_co_ban,
+                        He_so_luong,
+                        Luong_chuc_vu,
+                        Muc_thuong_phat,
+                        Thuc_nhan,
+                        Ghi_chu
+                    )
+                    VALUES
+                    (
+                        @Ma_luong,
+                        @Ma_nhan_vien,
+                        @Ten_nhan_vien,
+                        NULL,
+                        @Thang,
+                        @Nam,
+                        @Luong_co_ban,
+                        @He_so_luong,
+                        @Luong_chuc_vu,
+                        @Muc_thuong_phat,
+                        @Thuc_nhan,
+                        @Ghi_chu
+                    )
+                END";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn, tran))
+            {
+                cmd.Parameters.AddWithValue("@Ma_luong", GetNextSalaryId(conn, tran));
+                cmd.Parameters.AddWithValue("@Ma_nhan_vien", maNhanVien);
+                cmd.Parameters.AddWithValue("@Ten_nhan_vien", tenNhanVien);
+                cmd.Parameters.AddWithValue("@Thang", thang);
+                cmd.Parameters.AddWithValue("@Nam", nam);
+                cmd.Parameters.AddWithValue("@Luong_co_ban", luongCoBan);
+                cmd.Parameters.AddWithValue("@He_so_luong", heSoLuong);
+                cmd.Parameters.AddWithValue("@Luong_chuc_vu", luongChucVu);
+                cmd.Parameters.AddWithValue("@Muc_thuong_phat", tongThuongPhat);
+                cmd.Parameters.AddWithValue("@Thuc_nhan", thucNhan);
+                cmd.Parameters.AddWithValue("@Ghi_chu", "Lương = Lương cơ bản × Hệ số + Thưởng/phạt");
+
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        private int GetNextSalaryId(SqlConnection conn, SqlTransaction tran)
+        {
+            string query = @"
+                SELECT ISNULL(MAX(Ma_luong), 0) + 1
+                FROM LUONG WITH (UPDLOCK, HOLDLOCK)";
+
+            using (SqlCommand cmd = new SqlCommand(query, conn, tran))
+            {
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+
+        private void LoadSalaryData()
+        {
+            try
+            {
+                if (cmbThang.SelectedItem == null || cmbNam.SelectedItem == null)
+                    return;
+
+                using (SqlConnection conn = new SqlConnection(connectString))
+                {
+                    conn.Open();
+
+                    string query = @"
+                        SELECT
+                            l.Ma_luong,
+                            l.Ma_nhan_vien,
+                            l.Ten_nhan_vien,
+                            ISNULL(nv.So_tai_khoan, N'') AS So_tai_khoan,
+                            ISNULL(nv.Ten_ngan_hang, N'') AS Ten_ngan_hang,
+                            l.Thang,
+                            l.Nam,
+                            l.Luong_co_ban,
+                            l.He_so_luong,
+                            l.Luong_chuc_vu,
+                            l.Muc_thuong_phat,
+                            l.Thuc_nhan,
+                            l.Ghi_chu
+                        FROM LUONG l
+                        LEFT JOIN NHAN_VIEN nv ON l.Ma_nhan_vien = nv.Ma_nhan_vien
+                        WHERE l.Thang = @Thang
+                          AND l.Nam = @Nam";
+
+                    SqlCommand cmd = new SqlCommand();
+                    cmd.Connection = conn;
+                    cmd.Parameters.AddWithValue("@Thang", Convert.ToInt32(cmbThang.SelectedItem));
+                    cmd.Parameters.AddWithValue("@Nam", Convert.ToInt32(cmbNam.SelectedItem));
+
+                    if (cmbNhanVien.SelectedIndex > 0 && cmbNhanVien.SelectedValue != null)
+                    {
+                        query += " AND l.Ma_nhan_vien = @Ma_nhan_vien";
+                        cmd.Parameters.AddWithValue("@Ma_nhan_vien", Convert.ToInt32(cmbNhanVien.SelectedValue));
+                    }
+
+                    query += " ORDER BY l.Ten_nhan_vien";
+                    cmd.CommandText = query;
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    dataGridViewLuong.DataSource = dt;
+                    CalculateSalarySummary(dt);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi tải bảng lương: " + ex.Message);
+            }
+        }
+
+        private void CalculateSalarySummary(DataTable dt)
+        {
+            int soNhanVien = dt.Rows.Count;
+            decimal tongThuongPhat = 0;
+            decimal tongThucNhan = 0;
+
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row["Muc_thuong_phat"] != DBNull.Value)
+                    tongThuongPhat += Convert.ToDecimal(row["Muc_thuong_phat"]);
+
+                if (row["Thuc_nhan"] != DBNull.Value)
+                    tongThucNhan += Convert.ToDecimal(row["Thuc_nhan"]);
+            }
+
+            txtSoNhanVien.Text = soNhanVien.ToString();
+            txtTongThuongPhat.Text = tongThuongPhat.ToString("N0");
+            txtTongThucNhan.Text = tongThucNhan.ToString("N0");
+        }
+
+        private void ConfigureDataGridView()
+        {
+            if (dataGridViewLuong.Columns.Count == 0) return;
+
+            dataGridViewLuong.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewLuong.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridViewLuong.MultiSelect = false;
+            dataGridViewLuong.ReadOnly = true;
+            dataGridViewLuong.AllowUserToAddRows = false;
+            dataGridViewLuong.AllowUserToDeleteRows = false;
+
+            if (dataGridViewLuong.Columns.Contains("Ma_luong"))
+                dataGridViewLuong.Columns["Ma_luong"].HeaderText = "Mã lương";
+
+            if (dataGridViewLuong.Columns.Contains("Ma_nhan_vien"))
+                dataGridViewLuong.Columns["Ma_nhan_vien"].HeaderText = "Mã NV";
+
+            if (dataGridViewLuong.Columns.Contains("Ten_nhan_vien"))
+                dataGridViewLuong.Columns["Ten_nhan_vien"].HeaderText = "Tên nhân viên";
+
+            if (dataGridViewLuong.Columns.Contains("So_tai_khoan"))
+                dataGridViewLuong.Columns["So_tai_khoan"].HeaderText = "Số tài khoản";
+
+            if (dataGridViewLuong.Columns.Contains("Ten_ngan_hang"))
+                dataGridViewLuong.Columns["Ten_ngan_hang"].HeaderText = "Tên ngân hàng";
+
+            if (dataGridViewLuong.Columns.Contains("Thang"))
+                dataGridViewLuong.Columns["Thang"].HeaderText = "Tháng";
+
+            if (dataGridViewLuong.Columns.Contains("Nam"))
+                dataGridViewLuong.Columns["Nam"].HeaderText = "Năm";
+
+            if (dataGridViewLuong.Columns.Contains("Luong_co_ban"))
+            {
+                dataGridViewLuong.Columns["Luong_co_ban"].HeaderText = "Lương cơ bản";
+                dataGridViewLuong.Columns["Luong_co_ban"].DefaultCellStyle.Format = "N0";
+            }
+
+            if (dataGridViewLuong.Columns.Contains("He_so_luong"))
+                dataGridViewLuong.Columns["He_so_luong"].HeaderText = "Hệ số";
+
+            if (dataGridViewLuong.Columns.Contains("Luong_chuc_vu"))
+            {
+                dataGridViewLuong.Columns["Luong_chuc_vu"].HeaderText = "Lương chức vụ";
+                dataGridViewLuong.Columns["Luong_chuc_vu"].DefaultCellStyle.Format = "N0";
+            }
+
+            if (dataGridViewLuong.Columns.Contains("Muc_thuong_phat"))
+            {
+                dataGridViewLuong.Columns["Muc_thuong_phat"].HeaderText = "Thưởng/phạt";
+                dataGridViewLuong.Columns["Muc_thuong_phat"].DefaultCellStyle.Format = "N0";
+            }
+
+            if (dataGridViewLuong.Columns.Contains("Thuc_nhan"))
+            {
+                dataGridViewLuong.Columns["Thuc_nhan"].HeaderText = "Thực nhận";
+                dataGridViewLuong.Columns["Thuc_nhan"].DefaultCellStyle.Format = "N0";
+            }
+
+            if (dataGridViewLuong.Columns.Contains("Ghi_chu"))
+                dataGridViewLuong.Columns["Ghi_chu"].HeaderText = "Ghi chú";
+        }
+
+        private void btnLoc_Click(object sender, EventArgs e)
+        {
+            if (!HasSalaryPermission()) return;
+
+            LoadSalaryData();
+            ConfigureDataGridView();
+        }
+
+        private void btnTaiLai_Click(object sender, EventArgs e)
+        {
+            if (!HasSalaryPermission()) return;
+
+            cmbNhanVien.SelectedIndex = 0;
+            SetCurrentMonthYear();
+
+            LoadSalaryData();
+            ConfigureDataGridView();
+        }
+    }
+}

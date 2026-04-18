@@ -100,6 +100,8 @@ namespace QuanLyNhanSu.NhanVien.ThongTinNhanVien
             txtEmail.ReadOnly = true;
             txtAddress.ReadOnly = true;
             txtLuongCoBan.ReadOnly = true;
+            txtSoTaiKhoan.ReadOnly = true;
+            txtTenNganHang.ReadOnly = true;
 
             cmbGender.Enabled = false;
             cmbDepartment.Enabled = false;
@@ -143,6 +145,8 @@ namespace QuanLyNhanSu.NhanVien.ThongTinNhanVien
                             Ten_phong_ban,
                             Luong_co_ban,
                             Tinh_trang,
+                            So_tai_khoan,
+                            Ten_ngan_hang,
                             Anh_nv
                         FROM NHAN_VIEN
                         WHERE Ma_nhan_vien = @Ma_nhan_vien";
@@ -162,6 +166,8 @@ namespace QuanLyNhanSu.NhanVien.ThongTinNhanVien
                                 txtEmail.Text = reader["Email"].ToString();
                                 txtAddress.Text = reader["Dia_chi"].ToString();
                                 txtLuongCoBan.Text = reader["Luong_co_ban"].ToString();
+                                txtSoTaiKhoan.Text = reader["So_tai_khoan"] == DBNull.Value ? "" : reader["So_tai_khoan"].ToString();
+                                txtTenNganHang.Text = reader["Ten_ngan_hang"] == DBNull.Value ? "" : reader["Ten_ngan_hang"].ToString();
 
                                 cmbGender.Text = reader["Gioi_tinh"].ToString();
                                 cmbStatus.Text = reader["Tinh_trang"].ToString();

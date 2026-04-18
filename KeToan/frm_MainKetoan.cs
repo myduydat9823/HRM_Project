@@ -1,5 +1,6 @@
 ﻿using QuanLyNhanSu.KeToan.ChiTietChamCong;
 using QuanLyNhanSu.KeToan.ThuongPhat;
+using QuanLyNhanSu.KeToan.TinhLuong;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -64,6 +65,11 @@ namespace QuanLyNhanSu.KeToan
         {
             OpenChildForm(new frmThuongPhatKeToan(), "Thưởng Phạt");
 
+        }
+
+        private void btnLuong_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new frmLuongNhanVienKeToan(), "Lương");
         }
     }
 }

@@ -78,6 +78,10 @@ namespace QuanLyNhanSu
                 dataGridViewEmployees.Columns["Luong_co_ban"].HeaderText = "Lương cơ bản";
             if (dataGridViewEmployees.Columns.Contains("Tinh_trang"))
                 dataGridViewEmployees.Columns["Tinh_trang"].HeaderText = "Tình trạng";
+            if (dataGridViewEmployees.Columns.Contains("So_tai_khoan"))
+                dataGridViewEmployees.Columns["So_tai_khoan"].HeaderText = "Số tài khoản";
+            if (dataGridViewEmployees.Columns.Contains("Ten_ngan_hang"))
+                dataGridViewEmployees.Columns["Ten_ngan_hang"].HeaderText = "Tên ngân hàng";
 
             if (dataGridViewEmployees.Columns.Contains("Ma_chuc_vu"))
                 dataGridViewEmployees.Columns["Ma_chuc_vu"].Visible = false;
@@ -185,6 +189,8 @@ namespace QuanLyNhanSu
             txtEmail.Text = row.Cells["Email"].Value?.ToString() ?? "";
             txtAddress.Text = row.Cells["Dia_chi"].Value?.ToString() ?? "";
             txtLuongCoBan.Text = row.Cells["Luong_co_ban"].Value?.ToString() ?? "";
+            txtSoTaiKhoan.Text = row.Cells["So_tai_khoan"].Value?.ToString() ?? "";
+            txtTenNganHang.Text = row.Cells["Ten_ngan_hang"].Value?.ToString() ?? "";
             cmbGender.Text = row.Cells["Gioi_tinh"].Value?.ToString() ?? "";
             cmbStatus.Text = row.Cells["Tinh_trang"].Value?.ToString() ?? "";
 
@@ -400,6 +406,8 @@ namespace QuanLyNhanSu
                 TenPhongBan = cmbDepartment.Text,
                 LuongCoBan = decimal.Parse(txtLuongCoBan.Text.Trim()),
                 TinhTrang = cmbStatus.Text,
+                SoTaiKhoan = txtSoTaiKhoan.Text.Trim(),
+                TenNganHang = txtTenNganHang.Text.Trim(),
                 AnhNv = selectedImagePath
             };
         }
@@ -477,6 +485,8 @@ namespace QuanLyNhanSu
             txtEmail.Clear();
             txtAddress.Clear();
             txtLuongCoBan.Clear();
+            txtSoTaiKhoan.Clear();
+            txtTenNganHang.Clear();
 
             cmbGender.SelectedIndex = -1;
             cmbStatus.SelectedIndex = -1;

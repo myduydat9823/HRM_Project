@@ -35,6 +35,10 @@
             this.gbAnh = new System.Windows.Forms.GroupBox();
             this.btnThemAnh = new System.Windows.Forms.Button();
             this.pictureBoxAnh = new System.Windows.Forms.PictureBox();
+            this.txtTenNganHang = new System.Windows.Forms.TextBox();
+            this.lblTenNganHang = new System.Windows.Forms.Label();
+            this.txtSoTaiKhoan = new System.Windows.Forms.TextBox();
+            this.lblSoTaiKhoan = new System.Windows.Forms.Label();
             this.cmbStatus = new System.Windows.Forms.ComboBox();
             this.lblStatus = new System.Windows.Forms.Label();
             this.txtLuongCoBan = new System.Windows.Forms.TextBox();
@@ -188,6 +192,10 @@
             this.gbEmployeeInfo.Controls.Add(this.btnSua);
             this.gbEmployeeInfo.Controls.Add(this.btnThem);
             this.gbEmployeeInfo.Controls.Add(this.gbAnh);
+            this.gbEmployeeInfo.Controls.Add(this.txtTenNganHang);
+            this.gbEmployeeInfo.Controls.Add(this.lblTenNganHang);
+            this.gbEmployeeInfo.Controls.Add(this.txtSoTaiKhoan);
+            this.gbEmployeeInfo.Controls.Add(this.lblSoTaiKhoan);
             this.gbEmployeeInfo.Controls.Add(this.cmbStatus);
             this.gbEmployeeInfo.Controls.Add(this.lblStatus);
             this.gbEmployeeInfo.Controls.Add(this.txtLuongCoBan);
@@ -282,6 +290,38 @@
             this.pictureBoxAnh.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxAnh.TabIndex = 0;
             this.pictureBoxAnh.TabStop = false;
+            // 
+            // txtTenNganHang
+            // 
+            this.txtTenNganHang.Location = new System.Drawing.Point(707, 227);
+            this.txtTenNganHang.Name = "txtTenNganHang";
+            this.txtTenNganHang.Size = new System.Drawing.Size(180, 20);
+            this.txtTenNganHang.TabIndex = 33;
+            // 
+            // lblTenNganHang
+            // 
+            this.lblTenNganHang.AutoSize = true;
+            this.lblTenNganHang.Location = new System.Drawing.Point(612, 230);
+            this.lblTenNganHang.Name = "lblTenNganHang";
+            this.lblTenNganHang.Size = new System.Drawing.Size(80, 13);
+            this.lblTenNganHang.TabIndex = 32;
+            this.lblTenNganHang.Text = "Tên ngân hàng";
+            // 
+            // txtSoTaiKhoan
+            // 
+            this.txtSoTaiKhoan.Location = new System.Drawing.Point(707, 192);
+            this.txtSoTaiKhoan.Name = "txtSoTaiKhoan";
+            this.txtSoTaiKhoan.Size = new System.Drawing.Size(180, 20);
+            this.txtSoTaiKhoan.TabIndex = 31;
+            // 
+            // lblSoTaiKhoan
+            // 
+            this.lblSoTaiKhoan.AutoSize = true;
+            this.lblSoTaiKhoan.Location = new System.Drawing.Point(628, 195);
+            this.lblSoTaiKhoan.Name = "lblSoTaiKhoan";
+            this.lblSoTaiKhoan.Size = new System.Drawing.Size(67, 13);
+            this.lblSoTaiKhoan.TabIndex = 30;
+            this.lblSoTaiKhoan.Text = "Số tài khoản";
             // 
             // cmbStatus
             // 
@@ -594,5 +634,9 @@
         private System.Windows.Forms.Button btnXoa;
         private System.Windows.Forms.GroupBox gbEmployeeList;
         private System.Windows.Forms.DataGridView dataGridViewEmployees;
+        private System.Windows.Forms.TextBox txtSoTaiKhoan;
+        private System.Windows.Forms.Label lblSoTaiKhoan;
+        private System.Windows.Forms.TextBox txtTenNganHang;
+        private System.Windows.Forms.Label lblTenNganHang;
     }
 }

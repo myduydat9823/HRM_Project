@@ -174,6 +174,7 @@
             this.btnLuong.Text = "Lương";
             this.btnLuong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnLuong.UseVisualStyleBackColor = true;
+            this.btnLuong.Click += new System.EventHandler(this.btnLuong_Click);
             // 
             // btnThuongPhat
             // 

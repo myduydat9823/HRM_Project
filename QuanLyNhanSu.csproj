@@ -122,6 +122,12 @@
     <Compile Include="KeToan\ThuongPhat\frmThuongPhatKeToan.Designer.cs">
       <DependentUpon>frmThuongPhatKeToan.cs</DependentUpon>
     </Compile>
+    <Compile Include="KeToan\TinhLuong\frmLuongNhanVienKeToan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KeToan\TinhLuong\frmLuongNhanVienKeToan.Designer.cs">
+      <DependentUpon>frmLuongNhanVienKeToan.cs</DependentUpon>
+    </Compile>
     <Compile Include="NhanVien\ChamCongVaLuong\frmChiTietLuongNhanVien.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -217,8 +223,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="KeToan\TinhLuong\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

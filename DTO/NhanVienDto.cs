@@ -19,6 +19,8 @@ namespace QuanLyNhanSu.DTO
         public string TenPhongBan { get; set; }
         public decimal LuongCoBan { get; set; }
         public string TinhTrang { get; set; }
+        public string SoTaiKhoan { get; set; }
+        public string TenNganHang { get; set; }
         public string AnhNv { get; set; }
     }
 }
