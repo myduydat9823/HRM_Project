@@ -5,7 +5,6 @@ using QuanLyNhanSu.DTO;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 
 namespace QuanLyNhanSu
 {
@@ -13,9 +12,6 @@ namespace QuanLyNhanSu
     {
         private readonly NhanVienBLL nhanVienBLL = new NhanVienBLL();
         private readonly DanhMucBLL danhMucBLL = new DanhMucBLL();
-
-        private string connectstring =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
 
         private string selectedImagePath = "";
 
@@ -296,39 +292,11 @@ namespace QuanLyNhanSu
 
                 if (!ValidateInput(false)) return;
 
-                using (SqlConnection conn = new SqlConnection(connectstring))
-                {
-                    conn.Open();
+                nhanVienBLL.UpdateEmployee(CreateEmployeeDto());
 
-                    string query = @"
-                        UPDATE NHAN_VIEN
-                        SET
-                            Ten_nhan_vien = @Ten_nhan_vien,
-                            Ngay_sinh = @Ngay_sinh,
-                            Gioi_tinh = @Gioi_tinh,
-                            CCCD = @CCCD,
-                            Dia_chi = @Dia_chi,
-                            SDT = @SDT,
-                            Email = @Email,
-                            Ngay_vao_lam = @Ngay_vao_lam,
-                            Ma_chuc_vu = @Ma_chuc_vu,
-                            Ten_chuc_vu = @Ten_chuc_vu,
-                            Ma_phong_ban = @Ma_phong_ban,
-                            Ten_phong_ban = @Ten_phong_ban,
-                            Luong_co_ban = @Luong_co_ban,
-                            Tinh_trang = @Tinh_trang,
-                            Anh_nv = @Anh_nv
-                        WHERE Ma_nhan_vien = @Ma_nhan_vien";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    BindEmployeeParameters(cmd);
-
-                    cmd.ExecuteNonQuery();
-
-                    MessageBox.Show("Sửa nhân viên thành công.");
-                    LoadEmployeeData();
-                    ConfigureDataGridView();
-                }
+                MessageBox.Show("Sửa nhân viên thành công.");
+                LoadEmployeeData();
+                ConfigureDataGridView();
             }
             catch (Exception ex)
             {
@@ -355,21 +323,12 @@ namespace QuanLyNhanSu
 
                 if (result == DialogResult.No) return;
 
-                using (SqlConnection conn = new SqlConnection(connectstring))
-                {
-                    conn.Open();
+                nhanVienBLL.DeleteEmployee(int.Parse(txtMaNhanVien.Text));
 
-                    string query = "DELETE FROM NHAN_VIEN WHERE Ma_nhan_vien = @Ma_nhan_vien";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Ma_nhan_vien", int.Parse(txtMaNhanVien.Text));
-
-                    cmd.ExecuteNonQuery();
-
-                    MessageBox.Show("Xóa nhân viên thành công.");
-                    LoadEmployeeData();
-                    ConfigureDataGridView();
-                    ClearForm();
-                }
+                MessageBox.Show("Xóa nhân viên thành công.");
+                LoadEmployeeData();
+                ConfigureDataGridView();
+                ClearForm();
             }
             catch (Exception ex)
             {
@@ -443,30 +402,6 @@ namespace QuanLyNhanSu
                 TinhTrang = cmbStatus.Text,
                 AnhNv = selectedImagePath
             };
-        }
-
-        private void BindEmployeeParameters(SqlCommand cmd)
-        {
-            cmd.Parameters.AddWithValue("@Ma_nhan_vien", int.Parse(txtMaNhanVien.Text.Trim()));
-            cmd.Parameters.AddWithValue("@Ten_nhan_vien", txtFullName.Text.Trim());
-            cmd.Parameters.AddWithValue("@Ngay_sinh", dtpBirthDate.Value.Date);
-            cmd.Parameters.AddWithValue("@Gioi_tinh", cmbGender.Text.Trim());
-            cmd.Parameters.AddWithValue("@CCCD", txtCCCD.Text.Trim());
-            cmd.Parameters.AddWithValue("@Dia_chi", txtAddress.Text.Trim());
-            cmd.Parameters.AddWithValue("@SDT", txtPhone.Text.Trim());
-            cmd.Parameters.AddWithValue("@Email", txtEmail.Text.Trim());
-            cmd.Parameters.AddWithValue("@Ngay_vao_lam", dtpNgayVaoLam.Value.Date);
-            cmd.Parameters.AddWithValue("@Ma_chuc_vu", Convert.ToInt32(cmbPosition.SelectedValue));
-            cmd.Parameters.AddWithValue("@Ten_chuc_vu", cmbPosition.Text);
-            cmd.Parameters.AddWithValue("@Ma_phong_ban", Convert.ToInt32(cmbDepartment.SelectedValue));
-            cmd.Parameters.AddWithValue("@Ten_phong_ban", cmbDepartment.Text);
-            cmd.Parameters.AddWithValue("@Luong_co_ban", decimal.Parse(txtLuongCoBan.Text.Trim()));
-            cmd.Parameters.AddWithValue("@Tinh_trang", cmbStatus.Text);
-
-            if (string.IsNullOrWhiteSpace(selectedImagePath))
-                cmd.Parameters.AddWithValue("@Anh_nv", DBNull.Value);
-            else
-                cmd.Parameters.AddWithValue("@Anh_nv", selectedImagePath);
         }
 
         private bool ValidateInput(bool isAddNew)

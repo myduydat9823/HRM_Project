@@ -210,5 +210,74 @@ namespace QuanLyNhanSu.DAL
                 }
             }
         }
+
+        public void UpdateEmployee(NhanVienDto employee)
+        {
+            using (SqlConnection conn = DbConnectionFactory.CreateConnection())
+            {
+                conn.Open();
+
+                string query = @"
+                    UPDATE NHAN_VIEN
+                    SET
+                        Ten_nhan_vien = @Ten_nhan_vien,
+                        Ngay_sinh = @Ngay_sinh,
+                        Gioi_tinh = @Gioi_tinh,
+                        CCCD = @CCCD,
+                        Dia_chi = @Dia_chi,
+                        SDT = @SDT,
+                        Email = @Email,
+                        Ngay_vao_lam = @Ngay_vao_lam,
+                        Ma_chuc_vu = @Ma_chuc_vu,
+                        Ten_chuc_vu = @Ten_chuc_vu,
+                        Ma_phong_ban = @Ma_phong_ban,
+                        Ten_phong_ban = @Ten_phong_ban,
+                        Luong_co_ban = @Luong_co_ban,
+                        Tinh_trang = @Tinh_trang,
+                        Anh_nv = @Anh_nv
+                    WHERE Ma_nhan_vien = @Ma_nhan_vien";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Ma_nhan_vien", employee.MaNhanVien.Value);
+                    cmd.Parameters.AddWithValue("@Ten_nhan_vien", employee.TenNhanVien);
+                    cmd.Parameters.AddWithValue("@Ngay_sinh", employee.NgaySinh);
+                    cmd.Parameters.AddWithValue("@Gioi_tinh", employee.GioiTinh);
+                    cmd.Parameters.AddWithValue("@CCCD", employee.CCCD);
+                    cmd.Parameters.AddWithValue("@Dia_chi", employee.DiaChi);
+                    cmd.Parameters.AddWithValue("@SDT", employee.SDT);
+                    cmd.Parameters.AddWithValue("@Email", employee.Email);
+                    cmd.Parameters.AddWithValue("@Ngay_vao_lam", employee.NgayVaoLam);
+                    cmd.Parameters.AddWithValue("@Ma_chuc_vu", employee.MaChucVu);
+                    cmd.Parameters.AddWithValue("@Ten_chuc_vu", employee.TenChucVu);
+                    cmd.Parameters.AddWithValue("@Ma_phong_ban", employee.MaPhongBan);
+                    cmd.Parameters.AddWithValue("@Ten_phong_ban", employee.TenPhongBan);
+                    cmd.Parameters.AddWithValue("@Luong_co_ban", employee.LuongCoBan);
+                    cmd.Parameters.AddWithValue("@Tinh_trang", employee.TinhTrang);
+
+                    if (string.IsNullOrWhiteSpace(employee.AnhNv))
+                        cmd.Parameters.AddWithValue("@Anh_nv", DBNull.Value);
+                    else
+                        cmd.Parameters.AddWithValue("@Anh_nv", employee.AnhNv);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void DeleteEmployee(int maNhanVien)
+        {
+            using (SqlConnection conn = DbConnectionFactory.CreateConnection())
+            {
+                conn.Open();
+
+                string query = "DELETE FROM NHAN_VIEN WHERE Ma_nhan_vien = @Ma_nhan_vien";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Ma_nhan_vien", maNhanVien);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }
