@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using QuanLyNhanSu.BLL;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -9,6 +10,8 @@ namespace QuanLyNhanSu
 {
     public partial class frm_DanhSachNV : Form
     {
+        private readonly NhanVienBLL nhanVienBLL = new NhanVienBLL();
+
         private string connectstring =
             @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
 
@@ -34,37 +37,7 @@ namespace QuanLyNhanSu
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectstring))
-                {
-                    conn.Open();
-
-                    string query = @"
-                        SELECT 
-                            Ma_nhan_vien,
-                            Ten_nhan_vien,
-                            Ngay_sinh,
-                            Gioi_tinh,
-                            CCCD,
-                            Dia_chi,
-                            SDT,
-                            Email,
-                            Ngay_vao_lam,
-                            Ma_chuc_vu,
-                            Ten_chuc_vu,
-                            Ma_phong_ban,
-                            Ten_phong_ban,
-                            Luong_co_ban,
-                            Tinh_trang,
-                            Anh_nv
-                        FROM NHAN_VIEN
-                        ORDER BY Ma_nhan_vien";
-
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    dataGridViewEmployees.DataSource = dt;
-                }
+                dataGridViewEmployees.DataSource = nhanVienBLL.GetAllEmployees();
             }
             catch (Exception ex)
             {
