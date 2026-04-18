@@ -1,0 +1,23 @@
+# Visual Studio cache/options
+.vs/
+*.user
+*.suo
+
+# Build output
+bin/
+obj/
+
+# NuGet packages (nếu có dùng kiểu cũ)
+packages/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# SQL Server local database files
+*.mdf
+*.ldf
+
+# OS files
+Thumbs.db
+.DS_Store
