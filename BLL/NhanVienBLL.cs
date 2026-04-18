@@ -11,5 +11,10 @@ namespace QuanLyNhanSu.BLL
         {
             return nhanVienDAL.GetAllEmployees();
         }
+
+        public DataTable SearchEmployees(int? maPhongBan, int? maChucVu, string tinhTrang, string tuKhoa)
+        {
+            return nhanVienDAL.SearchEmployees(maPhongBan, maChucVu, tinhTrang, tuKhoa);
+        }
     }
 }

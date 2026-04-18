@@ -434,68 +434,25 @@ namespace QuanLyNhanSu
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectstring))
-                {
-                    conn.Open();
+                int? maPhongBan = cmbLocPhongBan.SelectedValue != null && cmbLocPhongBan.SelectedIndex > 0
+                    ? Convert.ToInt32(cmbLocPhongBan.SelectedValue)
+                    : (int?)null;
 
-                    string query = @"
-                        SELECT 
-                            Ma_nhan_vien,
-                            Ten_nhan_vien,
-                            Ngay_sinh,
-                            Gioi_tinh,
-                            CCCD,
-                            Dia_chi,
-                            SDT,
-                            Email,
-                            Ngay_vao_lam,
-                            Ma_chuc_vu,
-                            Ten_chuc_vu,
-                            Ma_phong_ban,
-                            Ten_phong_ban,
-                            Luong_co_ban,
-                            Tinh_trang,
-                            Anh_nv
-                        FROM NHAN_VIEN
-                        WHERE 1 = 1";
+                int? maChucVu = cmbLocChucVu.SelectedValue != null && cmbLocChucVu.SelectedIndex > 0
+                    ? Convert.ToInt32(cmbLocChucVu.SelectedValue)
+                    : (int?)null;
 
-                    SqlCommand cmd = new SqlCommand();
-                    cmd.Connection = conn;
+                string tinhTrang = cmbLocTinhTrang.SelectedIndex > 0
+                    ? cmbLocTinhTrang.Text
+                    : null;
 
-                    if (cmbLocPhongBan.SelectedValue != null && cmbLocPhongBan.SelectedIndex > 0)
-                    {
-                        query += " AND Ma_phong_ban = @Ma_phong_ban";
-                        cmd.Parameters.AddWithValue("@Ma_phong_ban", Convert.ToInt32(cmbLocPhongBan.SelectedValue));
-                    }
+                dataGridViewEmployees.DataSource = nhanVienBLL.SearchEmployees(
+                    maPhongBan,
+                    maChucVu,
+                    tinhTrang,
+                    txtTuKhoa.Text);
 
-                    if (cmbLocChucVu.SelectedValue != null && cmbLocChucVu.SelectedIndex > 0)
-                    {
-                        query += " AND Ma_chuc_vu = @Ma_chuc_vu";
-                        cmd.Parameters.AddWithValue("@Ma_chuc_vu", Convert.ToInt32(cmbLocChucVu.SelectedValue));
-                    }
-
-                    if (cmbLocTinhTrang.SelectedIndex > 0)
-                    {
-                        query += " AND Tinh_trang = @Tinh_trang";
-                        cmd.Parameters.AddWithValue("@Tinh_trang", cmbLocTinhTrang.Text);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(txtTuKhoa.Text))
-                    {
-                        query += " AND (Ten_nhan_vien LIKE @TuKhoa OR CCCD LIKE @TuKhoa OR SDT LIKE @TuKhoa OR CAST(Ma_nhan_vien AS NVARCHAR(20)) LIKE @TuKhoa)";
-                        cmd.Parameters.AddWithValue("@TuKhoa", "%" + txtTuKhoa.Text.Trim() + "%");
-                    }
-
-                    query += " ORDER BY Ma_nhan_vien";
-                    cmd.CommandText = query;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
-
-                    dataGridViewEmployees.DataSource = dt;
-                    ConfigureDataGridView();
-                }
+                ConfigureDataGridView();
             }
             catch (Exception ex)
             {
