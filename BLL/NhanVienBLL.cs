@@ -1,4 +1,6 @@
 using QuanLyNhanSu.DAL;
+using QuanLyNhanSu.DTO;
+using System;
 using System.Data;
 
 namespace QuanLyNhanSu.BLL
@@ -15,6 +17,21 @@ namespace QuanLyNhanSu.BLL
         public DataTable SearchEmployees(int? maPhongBan, int? maChucVu, string tinhTrang, string tuKhoa)
         {
             return nhanVienDAL.SearchEmployees(maPhongBan, maChucVu, tinhTrang, tuKhoa);
+        }
+
+        public int AddEmployee(NhanVienDto employee)
+        {
+            if (!employee.MaNhanVien.HasValue)
+            {
+                employee.MaNhanVien = nhanVienDAL.GetNextEmployeeId();
+            }
+            else if (nhanVienDAL.IsEmployeeIdExists(employee.MaNhanVien.Value))
+            {
+                throw new InvalidOperationException("Mã nhân viên đã tồn tại. Vui lòng nhập mã khác.");
+            }
+
+            nhanVienDAL.InsertEmployee(employee);
+            return employee.MaNhanVien.Value;
         }
     }
 }

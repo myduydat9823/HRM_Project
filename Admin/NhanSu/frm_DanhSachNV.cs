@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using QuanLyNhanSu.BLL;
+using QuanLyNhanSu.DTO;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -257,77 +258,24 @@ namespace QuanLyNhanSu
             {
                 if (!ValidateInput(true)) return;
 
-                using (SqlConnection conn = new SqlConnection(connectstring))
+                NhanVienDto employee = CreateEmployeeDto();
+
+                try
                 {
-                    conn.Open();
-
-                    int maNhanVien;
-                    if (string.IsNullOrWhiteSpace(txtMaNhanVien.Text))
-                    {
-                        maNhanVien = GetNextEmployeeId(conn);
-                        txtMaNhanVien.Text = maNhanVien.ToString();
-                    }
-                    else
-                    {
-                        maNhanVien = int.Parse(txtMaNhanVien.Text.Trim());
-                        if (IsEmployeeIdExists(conn, maNhanVien))
-                        {
-                            MessageBox.Show("Mã nhân viên đã tồn tại. Vui lòng nhập mã khác.");
-                            txtMaNhanVien.Focus();
-                            return;
-                        }
-                    }
-
-                    string query = @"
-                        INSERT INTO NHAN_VIEN
-                        (
-                            Ma_nhan_vien,
-                            Ten_nhan_vien,
-                            Ngay_sinh,
-                            Gioi_tinh,
-                            CCCD,
-                            Dia_chi,
-                            SDT,
-                            Email,
-                            Ngay_vao_lam,
-                            Ma_chuc_vu,
-                            Ten_chuc_vu,
-                            Ma_phong_ban,
-                            Ten_phong_ban,
-                            Luong_co_ban,
-                            Tinh_trang,
-                            Anh_nv
-                        )
-                        VALUES
-                        (
-                            @Ma_nhan_vien,
-                            @Ten_nhan_vien,
-                            @Ngay_sinh,
-                            @Gioi_tinh,
-                            @CCCD,
-                            @Dia_chi,
-                            @SDT,
-                            @Email,
-                            @Ngay_vao_lam,
-                            @Ma_chuc_vu,
-                            @Ten_chuc_vu,
-                            @Ma_phong_ban,
-                            @Ten_phong_ban,
-                            @Luong_co_ban,
-                            @Tinh_trang,
-                            @Anh_nv
-                        )";
-
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    BindEmployeeParameters(cmd);
-
-                    cmd.ExecuteNonQuery();
-
-                    MessageBox.Show("Thêm nhân viên thành công.");
-                    LoadEmployeeData();
-                    ConfigureDataGridView();
-                    ClearForm();
+                    int maNhanVien = nhanVienBLL.AddEmployee(employee);
+                    txtMaNhanVien.Text = maNhanVien.ToString();
                 }
+                catch (InvalidOperationException ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    txtMaNhanVien.Focus();
+                    return;
+                }
+
+                MessageBox.Show("Thêm nhân viên thành công.");
+                LoadEmployeeData();
+                ConfigureDataGridView();
+                ClearForm();
             }
             catch (Exception ex)
             {
@@ -472,6 +420,31 @@ namespace QuanLyNhanSu
         }
 
         // ================= HỖ TRỢ =================
+        private NhanVienDto CreateEmployeeDto()
+        {
+            return new NhanVienDto
+            {
+                MaNhanVien = string.IsNullOrWhiteSpace(txtMaNhanVien.Text)
+                    ? (int?)null
+                    : int.Parse(txtMaNhanVien.Text.Trim()),
+                TenNhanVien = txtFullName.Text.Trim(),
+                NgaySinh = dtpBirthDate.Value.Date,
+                GioiTinh = cmbGender.Text.Trim(),
+                CCCD = txtCCCD.Text.Trim(),
+                DiaChi = txtAddress.Text.Trim(),
+                SDT = txtPhone.Text.Trim(),
+                Email = txtEmail.Text.Trim(),
+                NgayVaoLam = dtpNgayVaoLam.Value.Date,
+                MaChucVu = Convert.ToInt32(cmbPosition.SelectedValue),
+                TenChucVu = cmbPosition.Text,
+                MaPhongBan = Convert.ToInt32(cmbDepartment.SelectedValue),
+                TenPhongBan = cmbDepartment.Text,
+                LuongCoBan = decimal.Parse(txtLuongCoBan.Text.Trim()),
+                TinhTrang = cmbStatus.Text,
+                AnhNv = selectedImagePath
+            };
+        }
+
         private void BindEmployeeParameters(SqlCommand cmd)
         {
             cmd.Parameters.AddWithValue("@Ma_nhan_vien", int.Parse(txtMaNhanVien.Text.Trim()));
@@ -494,21 +467,6 @@ namespace QuanLyNhanSu
                 cmd.Parameters.AddWithValue("@Anh_nv", DBNull.Value);
             else
                 cmd.Parameters.AddWithValue("@Anh_nv", selectedImagePath);
-        }
-
-        private int GetNextEmployeeId(SqlConnection conn)
-        {
-            string query = "SELECT ISNULL(MAX(Ma_nhan_vien), 0) + 1 FROM NHAN_VIEN";
-            SqlCommand cmd = new SqlCommand(query, conn);
-            return Convert.ToInt32(cmd.ExecuteScalar());
-        }
-
-        private bool IsEmployeeIdExists(SqlConnection conn, int maNhanVien)
-        {
-            string query = "SELECT COUNT(*) FROM NHAN_VIEN WHERE Ma_nhan_vien = @Ma_nhan_vien";
-            SqlCommand cmd = new SqlCommand(query, conn);
-            cmd.Parameters.AddWithValue("@Ma_nhan_vien", maNhanVien);
-            return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
         }
 
         private bool ValidateInput(bool isAddNew)

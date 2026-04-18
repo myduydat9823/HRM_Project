@@ -90,6 +90,7 @@
     <Compile Include="DAL\NhanVienDAL.cs" />
     <Compile Include="DAL\TaiKhoanDAL.cs" />
     <Compile Include="DTO\LoginResultDto.cs" />
+    <Compile Include="DTO\NhanVienDto.cs" />
     <Compile Include="DTO\TaiKhoanDto.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
