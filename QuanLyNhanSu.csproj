@@ -83,8 +83,10 @@
       <DependentUpon>frm_DuyetNghiPhep.cs</DependentUpon>
     </Compile>
     <Compile Include="BLL\AuthBLL.cs" />
+    <Compile Include="BLL\DanhMucBLL.cs" />
     <Compile Include="BLL\NhanVienBLL.cs" />
     <Compile Include="Common\DbConnectionFactory.cs" />
+    <Compile Include="DAL\DanhMucDAL.cs" />
     <Compile Include="DAL\NhanVienDAL.cs" />
     <Compile Include="DAL\TaiKhoanDAL.cs" />
     <Compile Include="DTO\LoginResultDto.cs" />

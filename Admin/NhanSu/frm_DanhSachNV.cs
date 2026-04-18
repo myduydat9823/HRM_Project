@@ -11,6 +11,7 @@ namespace QuanLyNhanSu
     public partial class frm_DanhSachNV : Form
     {
         private readonly NhanVienBLL nhanVienBLL = new NhanVienBLL();
+        private readonly DanhMucBLL danhMucBLL = new DanhMucBLL();
 
         private string connectstring =
             @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
@@ -94,33 +95,24 @@ namespace QuanLyNhanSu
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectstring))
-                {
-                    conn.Open();
+                DataTable dt = danhMucBLL.GetDepartments();
+                DataTable dt1 = dt.Copy();
+                DataTable dt2 = dt.Copy();
 
-                    string query = "SELECT Ma_phong_ban, Ten_phong_ban FROM PHONG_BAN ORDER BY Ten_phong_ban";
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
+                cmbDepartment.DataSource = dt1;
+                cmbDepartment.DisplayMember = "Ten_phong_ban";
+                cmbDepartment.ValueMember = "Ma_phong_ban";
+                cmbDepartment.SelectedIndex = -1;
 
-                    DataTable dt1 = dt.Copy();
-                    DataTable dt2 = dt.Copy();
+                DataRow rowAll = dt2.NewRow();
+                rowAll["Ma_phong_ban"] = DBNull.Value;
+                rowAll["Ten_phong_ban"] = "-- Tất cả --";
+                dt2.Rows.InsertAt(rowAll, 0);
 
-                    cmbDepartment.DataSource = dt1;
-                    cmbDepartment.DisplayMember = "Ten_phong_ban";
-                    cmbDepartment.ValueMember = "Ma_phong_ban";
-                    cmbDepartment.SelectedIndex = -1;
-
-                    DataRow rowAll = dt2.NewRow();
-                    rowAll["Ma_phong_ban"] = DBNull.Value;
-                    rowAll["Ten_phong_ban"] = "-- Tất cả --";
-                    dt2.Rows.InsertAt(rowAll, 0);
-
-                    cmbLocPhongBan.DataSource = dt2;
-                    cmbLocPhongBan.DisplayMember = "Ten_phong_ban";
-                    cmbLocPhongBan.ValueMember = "Ma_phong_ban";
-                    cmbLocPhongBan.SelectedIndex = 0;
-                }
+                cmbLocPhongBan.DataSource = dt2;
+                cmbLocPhongBan.DisplayMember = "Ten_phong_ban";
+                cmbLocPhongBan.ValueMember = "Ma_phong_ban";
+                cmbLocPhongBan.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
@@ -132,33 +124,24 @@ namespace QuanLyNhanSu
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectstring))
-                {
-                    conn.Open();
+                DataTable dt = danhMucBLL.GetPositions();
+                DataTable dt1 = dt.Copy();
+                DataTable dt2 = dt.Copy();
 
-                    string query = "SELECT Ma_chuc_vu, Ten_chuc_vu FROM CHUC_VU ORDER BY Ten_chuc_vu";
-                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
-                    DataTable dt = new DataTable();
-                    adapter.Fill(dt);
+                cmbPosition.DataSource = dt1;
+                cmbPosition.DisplayMember = "Ten_chuc_vu";
+                cmbPosition.ValueMember = "Ma_chuc_vu";
+                cmbPosition.SelectedIndex = -1;
 
-                    DataTable dt1 = dt.Copy();
-                    DataTable dt2 = dt.Copy();
+                DataRow rowAll = dt2.NewRow();
+                rowAll["Ma_chuc_vu"] = DBNull.Value;
+                rowAll["Ten_chuc_vu"] = "-- Tất cả --";
+                dt2.Rows.InsertAt(rowAll, 0);
 
-                    cmbPosition.DataSource = dt1;
-                    cmbPosition.DisplayMember = "Ten_chuc_vu";
-                    cmbPosition.ValueMember = "Ma_chuc_vu";
-                    cmbPosition.SelectedIndex = -1;
-
-                    DataRow rowAll = dt2.NewRow();
-                    rowAll["Ma_chuc_vu"] = DBNull.Value;
-                    rowAll["Ten_chuc_vu"] = "-- Tất cả --";
-                    dt2.Rows.InsertAt(rowAll, 0);
-
-                    cmbLocChucVu.DataSource = dt2;
-                    cmbLocChucVu.DisplayMember = "Ten_chuc_vu";
-                    cmbLocChucVu.ValueMember = "Ma_chuc_vu";
-                    cmbLocChucVu.SelectedIndex = 0;
-                }
+                cmbLocChucVu.DataSource = dt2;
+                cmbLocChucVu.DisplayMember = "Ten_chuc_vu";
+                cmbLocChucVu.ValueMember = "Ma_chuc_vu";
+                cmbLocChucVu.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
