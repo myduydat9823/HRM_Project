@@ -109,12 +109,12 @@ namespace QuanLyNhanSu
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            OpenChildForm(new frmBienBanDanhGiaAdmin(), "Bien ban danh gia");
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-
+            OpenChildForm(new QuanLyNhanSu.KeToan.TinhLuong.frmLuongNhanVienKeToan(), "Luong thang cua nhan vien");
         }
 
         private void pnlLogo_Paint(object sender, PaintEventArgs e)

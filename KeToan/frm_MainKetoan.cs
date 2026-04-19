@@ -1,6 +1,7 @@
 ﻿using QuanLyNhanSu.KeToan.ChiTietChamCong;
 using QuanLyNhanSu.KeToan.ThuongPhat;
 using QuanLyNhanSu.KeToan.TinhLuong;
+using QuanLyNhanSu.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,11 +21,20 @@ namespace QuanLyNhanSu.KeToan
         public frm_MainKetoan()
         {
             InitializeComponent();
+            this.Load += frm_MainKetoan_Load;
         }
         private void frm_MainKetoan_Load(object sender, EventArgs e)
         {
             lblHeader.Text = "Trang chủ";
 
+            try
+            {
+                btnDuyetThuongPhat.Visible = KetoanPermissionHelper.GetCurrentRole().CanApproveRewardPenalty;
+            }
+            catch
+            {
+                btnDuyetThuongPhat.Visible = false;
+            }
         }
         private void OpenChildForm(Form childForm, string title)
         {
@@ -65,6 +75,11 @@ namespace QuanLyNhanSu.KeToan
         {
             OpenChildForm(new frmThuongPhatKeToan(), "Thưởng Phạt");
 
+        }
+
+        private void btnDuyetThuongPhat_Click(object sender, EventArgs e)
+        {
+            OpenChildForm(new frmDuyetThuongPhatKeToan(), "Duyệt Thưởng Phạt");
         }
 
         private void btnLuong_Click(object sender, EventArgs e)

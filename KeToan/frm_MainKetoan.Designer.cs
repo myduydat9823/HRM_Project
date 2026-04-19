@@ -37,6 +37,7 @@
             this.btn_ChiTietChamCong = new System.Windows.Forms.Button();
             this.btnDangXuat = new System.Windows.Forms.Button();
             this.btnLuong = new System.Windows.Forms.Button();
+            this.btnDuyetThuongPhat = new System.Windows.Forms.Button();
             this.btnThuongPhat = new System.Windows.Forms.Button();
             this.btnChiTietChamCong = new System.Windows.Forms.Button();
             this.pnlLogo = new System.Windows.Forms.Panel();
@@ -86,6 +87,7 @@
             this.pnlMenu.Controls.Add(this.btn_ChiTietChamCong);
             this.pnlMenu.Controls.Add(this.btnDangXuat);
             this.pnlMenu.Controls.Add(this.btnLuong);
+            this.pnlMenu.Controls.Add(this.btnDuyetThuongPhat);
             this.pnlMenu.Controls.Add(this.btnThuongPhat);
             this.pnlMenu.Controls.Add(this.btnChiTietChamCong);
             this.pnlMenu.Controls.Add(this.pnlLogo);
@@ -102,7 +104,7 @@
             this.btnThongBao.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnThongBao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnThongBao.ForeColor = System.Drawing.Color.White;
-            this.btnThongBao.Location = new System.Drawing.Point(0, 400);
+            this.btnThongBao.Location = new System.Drawing.Point(0, 460);
             this.btnThongBao.Name = "btnThongBao";
             this.btnThongBao.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
             this.btnThongBao.Size = new System.Drawing.Size(220, 53);
@@ -118,7 +120,7 @@
             this.btn_NghiPhep.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_NghiPhep.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btn_NghiPhep.ForeColor = System.Drawing.Color.White;
-            this.btn_NghiPhep.Location = new System.Drawing.Point(0, 340);
+            this.btn_NghiPhep.Location = new System.Drawing.Point(0, 400);
             this.btn_NghiPhep.Name = "btn_NghiPhep";
             this.btn_NghiPhep.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
             this.btn_NghiPhep.Size = new System.Drawing.Size(220, 60);
@@ -134,7 +136,7 @@
             this.btn_ChiTietChamCong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btn_ChiTietChamCong.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btn_ChiTietChamCong.ForeColor = System.Drawing.Color.White;
-            this.btn_ChiTietChamCong.Location = new System.Drawing.Point(0, 280);
+            this.btn_ChiTietChamCong.Location = new System.Drawing.Point(0, 340);
             this.btn_ChiTietChamCong.Name = "btn_ChiTietChamCong";
             this.btn_ChiTietChamCong.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
             this.btn_ChiTietChamCong.Size = new System.Drawing.Size(220, 60);
@@ -166,7 +168,7 @@
             this.btnLuong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLuong.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnLuong.ForeColor = System.Drawing.Color.White;
-            this.btnLuong.Location = new System.Drawing.Point(0, 220);
+            this.btnLuong.Location = new System.Drawing.Point(0, 280);
             this.btnLuong.Name = "btnLuong";
             this.btnLuong.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
             this.btnLuong.Size = new System.Drawing.Size(220, 60);
@@ -175,6 +177,23 @@
             this.btnLuong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnLuong.UseVisualStyleBackColor = true;
             this.btnLuong.Click += new System.EventHandler(this.btnLuong_Click);
+            // 
+            // btnDuyetThuongPhat
+            // 
+            this.btnDuyetThuongPhat.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnDuyetThuongPhat.FlatAppearance.BorderSize = 0;
+            this.btnDuyetThuongPhat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDuyetThuongPhat.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.btnDuyetThuongPhat.ForeColor = System.Drawing.Color.White;
+            this.btnDuyetThuongPhat.Location = new System.Drawing.Point(0, 220);
+            this.btnDuyetThuongPhat.Name = "btnDuyetThuongPhat";
+            this.btnDuyetThuongPhat.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
+            this.btnDuyetThuongPhat.Size = new System.Drawing.Size(220, 60);
+            this.btnDuyetThuongPhat.TabIndex = 8;
+            this.btnDuyetThuongPhat.Text = "Duyệt Thưởng Phạt";
+            this.btnDuyetThuongPhat.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDuyetThuongPhat.UseVisualStyleBackColor = true;
+            this.btnDuyetThuongPhat.Click += new System.EventHandler(this.btnDuyetThuongPhat_Click);
             // 
             // btnThuongPhat
             // 
@@ -260,6 +279,7 @@
         private System.Windows.Forms.Button btn_ChiTietChamCong;
         private System.Windows.Forms.Button btnDangXuat;
         private System.Windows.Forms.Button btnLuong;
+        private System.Windows.Forms.Button btnDuyetThuongPhat;
         private System.Windows.Forms.Button btnThuongPhat;
         private System.Windows.Forms.Button btnChiTietChamCong;
         private System.Windows.Forms.Panel pnlLogo;

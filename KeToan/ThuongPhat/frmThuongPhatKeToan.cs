@@ -2,16 +2,20 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
-using static System.Collections.Specialized.BitVector32;
+using QuanLyNhanSu.Common;
 
 namespace QuanLyNhanSu.KeToan.ThuongPhat
 {
     public partial class frmThuongPhatKeToan : Form
     {
+        private const string TrangThaiChoDuyet = "Chờ duyệt";
+        private const string TrangThaiDaDuyet = "Đã duyệt";
+
         private readonly string connectString =
             @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
 
         private bool isProcessing = false;
+        private KetoanRoleInfo currentRole;
 
         public frmThuongPhatKeToan()
         {
@@ -36,6 +40,35 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                 MessageBox.Show("Bạn không có quyền truy cập chức năng thưởng/phạt.");
                 this.Close();
                 return;
+            }
+
+            try
+            {
+                currentRole = KetoanPermissionHelper.GetCurrentRole();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi kiểm tra quyền kế toán: " + ex.Message);
+                this.Close();
+                return;
+            }
+
+            if (!currentRole.CanCreateRewardPenalty)
+            {
+                MessageBox.Show("Chỉ trưởng phòng kế toán hoặc kế toán viên mới được dùng chức năng thưởng/phạt.");
+                this.Close();
+                return;
+            }
+
+            if (currentRole.CanApproveRewardPenalty)
+            {
+                lblTitle.Text = "QUẢN LÝ KHEN THƯỞNG / KỶ LUẬT";
+                btnThem.Text = "Thêm";
+            }
+            else
+            {
+                lblTitle.Text = "GỬI YÊU CẦU KHEN THƯỞNG / KỶ LUẬT";
+                btnThem.Text = "Gửi duyệt";
             }
 
             LoadEmployeeCombobox();
@@ -193,7 +226,12 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                             Ten_chuc_vu,
                             Ten_phong_ban,
                             Muc_thuong_phat,
-                            Ly_do
+                            Ly_do,
+                            ISNULL(Trang_thai, N'Đã duyệt') AS Trang_thai,
+                            Nguoi_tao,
+                            Nguoi_duyet,
+                            Ngay_duyet,
+                            Ly_do_duyet
                         FROM KHEN_THUONG_KY_LUAT
                         WHERE MONTH(Ngay_lap) = @Thang
                           AND YEAR(Ngay_lap) = @Nam";
@@ -265,6 +303,21 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
 
             if (dataGridViewThuongPhat.Columns.Contains("Ly_do"))
                 dataGridViewThuongPhat.Columns["Ly_do"].HeaderText = "Lý do";
+
+            if (dataGridViewThuongPhat.Columns.Contains("Trang_thai"))
+                dataGridViewThuongPhat.Columns["Trang_thai"].HeaderText = "Trạng thái";
+
+            if (dataGridViewThuongPhat.Columns.Contains("Ngay_duyet"))
+                dataGridViewThuongPhat.Columns["Ngay_duyet"].HeaderText = "Ngày duyệt";
+
+            if (dataGridViewThuongPhat.Columns.Contains("Nguoi_tao"))
+                dataGridViewThuongPhat.Columns["Nguoi_tao"].Visible = false;
+
+            if (dataGridViewThuongPhat.Columns.Contains("Nguoi_duyet"))
+                dataGridViewThuongPhat.Columns["Nguoi_duyet"].Visible = false;
+
+            if (dataGridViewThuongPhat.Columns.Contains("Ly_do_duyet"))
+                dataGridViewThuongPhat.Columns["Ly_do_duyet"].Visible = false;
         }
 
         private void dataGridViewThuongPhat_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -311,6 +364,8 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
 
                 int maQuyetDinh = GetNextDecisionId(conn, tran);
                 decimal mucThuongPhat = GetNormalizedAmount();
+                bool duyetNgay = currentRole != null && currentRole.CanApproveRewardPenalty;
+                string trangThai = duyetNgay ? TrangThaiDaDuyet : TrangThaiChoDuyet;
 
                 string query = @"
                     INSERT INTO KHEN_THUONG_KY_LUAT
@@ -323,7 +378,12 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                         Ten_chuc_vu,
                         Ten_phong_ban,
                         Muc_thuong_phat,
-                        Ly_do
+                        Ly_do,
+                        Trang_thai,
+                        Nguoi_tao,
+                        Nguoi_duyet,
+                        Ngay_duyet,
+                        Ly_do_duyet
                     )
                     VALUES
                     (
@@ -335,7 +395,12 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                         @Ten_chuc_vu,
                         @Ten_phong_ban,
                         @Muc_thuong_phat,
-                        @Ly_do
+                        @Ly_do,
+                        @Trang_thai,
+                        @Nguoi_tao,
+                        @Nguoi_duyet,
+                        @Ngay_duyet,
+                        @Ly_do_duyet
                     )";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn, tran))
@@ -349,13 +414,22 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                     cmd.Parameters.AddWithValue("@Ten_phong_ban", txtPhongBan.Text.Trim());
                     cmd.Parameters.AddWithValue("@Muc_thuong_phat", mucThuongPhat);
                     cmd.Parameters.AddWithValue("@Ly_do", txtLyDo.Text.Trim());
+                    cmd.Parameters.AddWithValue("@Trang_thai", trangThai);
+                    cmd.Parameters.AddWithValue("@Nguoi_tao", GetSessionEmployeeValue());
+                    cmd.Parameters.AddWithValue("@Nguoi_duyet", duyetNgay ? GetSessionEmployeeValue() : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Ngay_duyet", duyetNgay ? (object)DateTime.Now : DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Ly_do_duyet", DBNull.Value);
 
                     cmd.ExecuteNonQuery();
                 }
 
                 tran.Commit();
 
-                MessageBox.Show("Thêm thưởng/phạt thành công.");
+                if (duyetNgay)
+                    MessageBox.Show("Thêm thưởng/phạt thành công. Quyết định đã được duyệt.");
+                else
+                    MessageBox.Show("Đã gửi yêu cầu thưởng/phạt. Trưởng phòng kế toán cần duyệt trước khi khoản này được tính vào lương.");
+
                 LoadRewardPenaltyData();
                 ConfigureDataGridView();
                 ClearForm();
@@ -392,8 +466,11 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                 }
 
                 if (!ValidateInput()) return;
+                if (!CanModifySelectedDecision()) return;
 
                 decimal mucThuongPhat = GetNormalizedAmount();
+                bool duyetNgay = currentRole != null && currentRole.CanApproveRewardPenalty;
+                string trangThai = duyetNgay ? TrangThaiDaDuyet : TrangThaiChoDuyet;
 
                 using (SqlConnection conn = new SqlConnection(connectString))
                 {
@@ -409,7 +486,12 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                             Ten_chuc_vu = @Ten_chuc_vu,
                             Ten_phong_ban = @Ten_phong_ban,
                             Muc_thuong_phat = @Muc_thuong_phat,
-                            Ly_do = @Ly_do
+                            Ly_do = @Ly_do,
+                            Trang_thai = @Trang_thai,
+                            Nguoi_tao = ISNULL(Nguoi_tao, @Nguoi_tao),
+                            Nguoi_duyet = @Nguoi_duyet,
+                            Ngay_duyet = @Ngay_duyet,
+                            Ly_do_duyet = @Ly_do_duyet
                         WHERE Ma_quyet_dinh = @Ma_quyet_dinh";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -423,12 +505,21 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                         cmd.Parameters.AddWithValue("@Ten_phong_ban", txtPhongBan.Text.Trim());
                         cmd.Parameters.AddWithValue("@Muc_thuong_phat", mucThuongPhat);
                         cmd.Parameters.AddWithValue("@Ly_do", txtLyDo.Text.Trim());
+                        cmd.Parameters.AddWithValue("@Trang_thai", trangThai);
+                        cmd.Parameters.AddWithValue("@Nguoi_tao", GetSessionEmployeeValue());
+                        cmd.Parameters.AddWithValue("@Nguoi_duyet", duyetNgay ? GetSessionEmployeeValue() : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Ngay_duyet", duyetNgay ? (object)DateTime.Now : DBNull.Value);
+                        cmd.Parameters.AddWithValue("@Ly_do_duyet", DBNull.Value);
 
                         cmd.ExecuteNonQuery();
                     }
                 }
 
-                MessageBox.Show("Sửa thưởng/phạt thành công.");
+                if (duyetNgay)
+                    MessageBox.Show("Sửa thưởng/phạt thành công. Quyết định đang ở trạng thái đã duyệt.");
+                else
+                    MessageBox.Show("Sửa yêu cầu thưởng/phạt thành công. Yêu cầu vẫn đang chờ duyệt.");
+
                 LoadRewardPenaltyData();
                 ConfigureDataGridView();
                 ClearForm();
@@ -455,6 +546,8 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                     MessageBox.Show("Vui lòng chọn quyết định cần xóa.");
                     return;
                 }
+
+                if (!CanModifySelectedDecision()) return;
 
                 DialogResult result = MessageBox.Show(
                     "Bạn có chắc muốn xóa quyết định này không?",
@@ -510,6 +603,44 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
             LoadRewardPenaltyData();
             ConfigureDataGridView();
             ClearForm();
+        }
+
+        private object GetSessionEmployeeValue()
+        {
+            if (session.MaNhanVien <= 0)
+                return DBNull.Value;
+
+            return session.MaNhanVien;
+        }
+
+        private bool CanModifySelectedDecision()
+        {
+            if (currentRole != null && currentRole.CanApproveRewardPenalty)
+                return true;
+
+            string trangThai = GetSelectedDecisionStatus();
+
+            if (trangThai == TrangThaiChoDuyet)
+                return true;
+
+            MessageBox.Show("Kế toán viên chỉ được sửa hoặc xóa yêu cầu đang chờ duyệt.");
+            return false;
+        }
+
+        private string GetSelectedDecisionStatus()
+        {
+            if (dataGridViewThuongPhat.CurrentRow == null
+                || !dataGridViewThuongPhat.Columns.Contains("Trang_thai"))
+            {
+                return TrangThaiDaDuyet;
+            }
+
+            object value = dataGridViewThuongPhat.CurrentRow.Cells["Trang_thai"].Value;
+
+            if (value == null || value == DBNull.Value)
+                return TrangThaiDaDuyet;
+
+            return value.ToString();
         }
 
         private bool ValidateInput()

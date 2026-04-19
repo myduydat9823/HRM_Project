@@ -225,7 +225,52 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
 
         private DataTable GetSalarySourceData(SqlConnection conn, SqlTransaction tran, int thang, int nam, int? maNhanVien)
         {
+            DateTime tuNgay = new DateTime(nam, thang, 1);
+            DateTime denNgay = tuNgay.AddMonths(1).AddDays(-1);
+
             string query = @"
+                ;WITH ChamCongTongHop AS
+                (
+                    SELECT
+                        Ma_nhan_vien,
+                        COUNT(*) AS Tong_so_cong,
+                        SUM(ISNULL(So_gio_lam_viec, 0)) AS Tong_gio_lam,
+                        SUM(CASE
+                                WHEN ISNULL(Di_muon, 0) = 1
+                                     OR (Gio_vao IS NOT NULL AND Gio_vao > CAST('08:00:00' AS TIME))
+                                THEN 1 ELSE 0
+                            END) AS So_ngay_di_muon,
+                        SUM(CASE
+                                WHEN Gio_ra IS NOT NULL AND Gio_ra < CAST('17:00:00' AS TIME)
+                                THEN 1 ELSE 0
+                            END) AS So_ngay_ve_som,
+                        SUM(CASE
+                                WHEN ISNULL(Nghi_phep, 0) = 1
+                                THEN 1 ELSE 0
+                            END) AS So_ngay_nghi_phep_cham_cong
+                    FROM CHAM_CONG
+                    WHERE MONTH(Ngay_cham_cong) = @Thang
+                      AND YEAR(Ngay_cham_cong) = @Nam
+                    GROUP BY Ma_nhan_vien
+                ),
+                NghiPhepTongHop AS
+                (
+                    SELECT
+                        Ma_nhan_vien,
+                        SUM(
+                            DATEDIFF(
+                                DAY,
+                                CASE WHEN Ngay_bat_dau < @TuNgay THEN @TuNgay ELSE Ngay_bat_dau END,
+                                CASE WHEN Ngay_ket_thuc > @DenNgay THEN @DenNgay ELSE Ngay_ket_thuc END
+                            ) + 1
+                        ) AS So_ngay_nghi_duyet
+                    FROM NGHI_PHEP_THOI_VIEC
+                    WHERE Loai_don = N'Nghỉ phép'
+                      AND Tinh_trang = N'Đã duyệt'
+                      AND Ngay_bat_dau <= @DenNgay
+                      AND Ngay_ket_thuc >= @TuNgay
+                    GROUP BY Ma_nhan_vien
+                )
                 SELECT
                     nv.Ma_nhan_vien,
                     nv.Ten_nhan_vien,
@@ -237,9 +282,21 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
                     ISNULL(kt.Tong_thuong_phat, 0) AS Tong_thuong_phat,
 
                     (nv.Luong_co_ban * ISNULL(cv.He_so_luong, 1))
-                        + ISNULL(kt.Tong_thuong_phat, 0) AS Thuc_nhan
+                        + ISNULL(kt.Tong_thuong_phat, 0) AS Thuc_nhan,
+
+                    ISNULL(ccth.Tong_so_cong, 0) AS Tong_so_cong,
+                    ISNULL(ccth.Tong_gio_lam, 0) AS Tong_gio_lam,
+                    CASE
+                        WHEN ISNULL(npth.So_ngay_nghi_duyet, 0) > ISNULL(ccth.So_ngay_nghi_phep_cham_cong, 0)
+                        THEN ISNULL(npth.So_ngay_nghi_duyet, 0)
+                        ELSE ISNULL(ccth.So_ngay_nghi_phep_cham_cong, 0)
+                    END AS So_ngay_nghi_phep,
+                    ISNULL(ccth.So_ngay_di_muon, 0) AS So_ngay_di_muon,
+                    ISNULL(ccth.So_ngay_ve_som, 0) AS So_ngay_ve_som
                 FROM NHAN_VIEN nv
                 LEFT JOIN CHUC_VU cv ON nv.Ma_chuc_vu = cv.Ma_chuc_vu
+                LEFT JOIN ChamCongTongHop ccth ON nv.Ma_nhan_vien = ccth.Ma_nhan_vien
+                LEFT JOIN NghiPhepTongHop npth ON nv.Ma_nhan_vien = npth.Ma_nhan_vien
                 LEFT JOIN
                 (
                     SELECT
@@ -248,6 +305,7 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
                     FROM KHEN_THUONG_KY_LUAT
                     WHERE MONTH(Ngay_lap) = @Thang
                       AND YEAR(Ngay_lap) = @Nam
+                      AND ISNULL(Trang_thai, N'Đã duyệt') = N'Đã duyệt'
                     GROUP BY Ma_nhan_vien
                 ) kt ON nv.Ma_nhan_vien = kt.Ma_nhan_vien
                 WHERE nv.Tinh_trang = N'Đang làm'";
@@ -263,6 +321,8 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
             {
                 cmd.Parameters.AddWithValue("@Thang", thang);
                 cmd.Parameters.AddWithValue("@Nam", nam);
+                cmd.Parameters.AddWithValue("@TuNgay", tuNgay);
+                cmd.Parameters.AddWithValue("@DenNgay", denNgay);
 
                 if (maNhanVien.HasValue)
                 {
@@ -287,6 +347,11 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
             decimal luongChucVu = Convert.ToDecimal(row["Luong_chuc_vu"]);
             decimal tongThuongPhat = Convert.ToDecimal(row["Tong_thuong_phat"]);
             decimal thucNhan = Convert.ToDecimal(row["Thuc_nhan"]);
+            int tongSoCong = Convert.ToInt32(row["Tong_so_cong"]);
+            decimal tongGioLam = Convert.ToDecimal(row["Tong_gio_lam"]);
+            int soNgayNghiPhep = Convert.ToInt32(row["So_ngay_nghi_phep"]);
+            int soNgayDiMuon = Convert.ToInt32(row["So_ngay_di_muon"]);
+            int soNgayVeSom = Convert.ToInt32(row["So_ngay_ve_som"]);
 
             string query = @"
                 IF EXISTS (
@@ -356,7 +421,13 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
                 cmd.Parameters.AddWithValue("@Luong_chuc_vu", luongChucVu);
                 cmd.Parameters.AddWithValue("@Muc_thuong_phat", tongThuongPhat);
                 cmd.Parameters.AddWithValue("@Thuc_nhan", thucNhan);
-                cmd.Parameters.AddWithValue("@Ghi_chu", "Lương = Lương cơ bản × Hệ số + Thưởng/phạt");
+                cmd.Parameters.AddWithValue("@Ghi_chu",
+                    "Luong = Luong co ban x He so + Thuong/phat; " +
+                    "Cong: " + tongSoCong +
+                    "; Gio lam: " + tongGioLam.ToString("0.##") +
+                    "; Nghi phep: " + soNgayNghiPhep +
+                    "; Di muon: " + soNgayDiMuon +
+                    "; Ve som: " + soNgayVeSom);
 
                 cmd.ExecuteNonQuery();
             }
@@ -381,19 +452,77 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
                 if (cmbThang.SelectedItem == null || cmbNam.SelectedItem == null)
                     return;
 
+                int thang = Convert.ToInt32(cmbThang.SelectedItem);
+                int nam = Convert.ToInt32(cmbNam.SelectedItem);
+                DateTime tuNgay = new DateTime(nam, thang, 1);
+                DateTime denNgay = tuNgay.AddMonths(1).AddDays(-1);
+
                 using (SqlConnection conn = new SqlConnection(connectString))
                 {
                     conn.Open();
 
                     string query = @"
+                        ;WITH ChamCongTongHop AS
+                        (
+                            SELECT
+                                Ma_nhan_vien,
+                                COUNT(*) AS Tong_so_cong,
+                                SUM(ISNULL(So_gio_lam_viec, 0)) AS Tong_gio_lam,
+                                SUM(CASE
+                                        WHEN ISNULL(Di_muon, 0) = 1
+                                             OR (Gio_vao IS NOT NULL AND Gio_vao > CAST('08:00:00' AS TIME))
+                                        THEN 1 ELSE 0
+                                    END) AS So_ngay_di_muon,
+                                SUM(CASE
+                                        WHEN Gio_ra IS NOT NULL AND Gio_ra < CAST('17:00:00' AS TIME)
+                                        THEN 1 ELSE 0
+                                    END) AS So_ngay_ve_som,
+                                SUM(CASE
+                                        WHEN ISNULL(Nghi_phep, 0) = 1
+                                        THEN 1 ELSE 0
+                                    END) AS So_ngay_nghi_phep_cham_cong
+                            FROM CHAM_CONG
+                            WHERE MONTH(Ngay_cham_cong) = @Thang
+                              AND YEAR(Ngay_cham_cong) = @Nam
+                            GROUP BY Ma_nhan_vien
+                        ),
+                        NghiPhepTongHop AS
+                        (
+                            SELECT
+                                Ma_nhan_vien,
+                                SUM(
+                                    DATEDIFF(
+                                        DAY,
+                                        CASE WHEN Ngay_bat_dau < @TuNgay THEN @TuNgay ELSE Ngay_bat_dau END,
+                                        CASE WHEN Ngay_ket_thuc > @DenNgay THEN @DenNgay ELSE Ngay_ket_thuc END
+                                    ) + 1
+                                ) AS So_ngay_nghi_duyet
+                            FROM NGHI_PHEP_THOI_VIEC
+                            WHERE Loai_don = N'Nghỉ phép'
+                              AND Tinh_trang = N'Đã duyệt'
+                              AND Ngay_bat_dau <= @DenNgay
+                              AND Ngay_ket_thuc >= @TuNgay
+                            GROUP BY Ma_nhan_vien
+                        )
                         SELECT
                             l.Ma_luong,
                             l.Ma_nhan_vien,
                             l.Ten_nhan_vien,
+                            ISNULL(nv.Ten_phong_ban, N'') AS Ten_phong_ban,
+                            ISNULL(nv.Ten_chuc_vu, N'') AS Ten_chuc_vu,
                             ISNULL(nv.So_tai_khoan, N'') AS So_tai_khoan,
                             ISNULL(nv.Ten_ngan_hang, N'') AS Ten_ngan_hang,
                             l.Thang,
                             l.Nam,
+                            ISNULL(ccth.Tong_so_cong, 0) AS Tong_so_cong,
+                            ISNULL(ccth.Tong_gio_lam, 0) AS Tong_gio_lam,
+                            CASE
+                                WHEN ISNULL(npth.So_ngay_nghi_duyet, 0) > ISNULL(ccth.So_ngay_nghi_phep_cham_cong, 0)
+                                THEN ISNULL(npth.So_ngay_nghi_duyet, 0)
+                                ELSE ISNULL(ccth.So_ngay_nghi_phep_cham_cong, 0)
+                            END AS So_ngay_nghi_phep,
+                            ISNULL(ccth.So_ngay_di_muon, 0) AS So_ngay_di_muon,
+                            ISNULL(ccth.So_ngay_ve_som, 0) AS So_ngay_ve_som,
                             l.Luong_co_ban,
                             l.He_so_luong,
                             l.Luong_chuc_vu,
@@ -402,13 +531,17 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
                             l.Ghi_chu
                         FROM LUONG l
                         LEFT JOIN NHAN_VIEN nv ON l.Ma_nhan_vien = nv.Ma_nhan_vien
+                        LEFT JOIN ChamCongTongHop ccth ON l.Ma_nhan_vien = ccth.Ma_nhan_vien
+                        LEFT JOIN NghiPhepTongHop npth ON l.Ma_nhan_vien = npth.Ma_nhan_vien
                         WHERE l.Thang = @Thang
                           AND l.Nam = @Nam";
 
                     SqlCommand cmd = new SqlCommand();
                     cmd.Connection = conn;
-                    cmd.Parameters.AddWithValue("@Thang", Convert.ToInt32(cmbThang.SelectedItem));
-                    cmd.Parameters.AddWithValue("@Nam", Convert.ToInt32(cmbNam.SelectedItem));
+                    cmd.Parameters.AddWithValue("@Thang", thang);
+                    cmd.Parameters.AddWithValue("@Nam", nam);
+                    cmd.Parameters.AddWithValue("@TuNgay", tuNgay);
+                    cmd.Parameters.AddWithValue("@DenNgay", denNgay);
 
                     if (cmbNhanVien.SelectedIndex > 0 && cmbNhanVien.SelectedValue != null)
                     {
@@ -473,6 +606,12 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
             if (dataGridViewLuong.Columns.Contains("Ten_nhan_vien"))
                 dataGridViewLuong.Columns["Ten_nhan_vien"].HeaderText = "Tên nhân viên";
 
+            if (dataGridViewLuong.Columns.Contains("Ten_phong_ban"))
+                dataGridViewLuong.Columns["Ten_phong_ban"].HeaderText = "Phòng ban";
+
+            if (dataGridViewLuong.Columns.Contains("Ten_chuc_vu"))
+                dataGridViewLuong.Columns["Ten_chuc_vu"].HeaderText = "Chức vụ";
+
             if (dataGridViewLuong.Columns.Contains("So_tai_khoan"))
                 dataGridViewLuong.Columns["So_tai_khoan"].HeaderText = "Số tài khoản";
 
@@ -484,6 +623,24 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
 
             if (dataGridViewLuong.Columns.Contains("Nam"))
                 dataGridViewLuong.Columns["Nam"].HeaderText = "Năm";
+
+            if (dataGridViewLuong.Columns.Contains("Tong_so_cong"))
+                dataGridViewLuong.Columns["Tong_so_cong"].HeaderText = "Tổng công";
+
+            if (dataGridViewLuong.Columns.Contains("Tong_gio_lam"))
+            {
+                dataGridViewLuong.Columns["Tong_gio_lam"].HeaderText = "Tổng giờ";
+                dataGridViewLuong.Columns["Tong_gio_lam"].DefaultCellStyle.Format = "N2";
+            }
+
+            if (dataGridViewLuong.Columns.Contains("So_ngay_nghi_phep"))
+                dataGridViewLuong.Columns["So_ngay_nghi_phep"].HeaderText = "Ngày nghỉ";
+
+            if (dataGridViewLuong.Columns.Contains("So_ngay_di_muon"))
+                dataGridViewLuong.Columns["So_ngay_di_muon"].HeaderText = "Đi muộn";
+
+            if (dataGridViewLuong.Columns.Contains("So_ngay_ve_som"))
+                dataGridViewLuong.Columns["So_ngay_ve_som"].HeaderText = "Về sớm";
 
             if (dataGridViewLuong.Columns.Contains("Luong_co_ban"))
             {

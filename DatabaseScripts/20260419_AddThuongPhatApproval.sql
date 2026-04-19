@@ -1,0 +1,50 @@
+USE [QUAN_LY_NHAN_VIEN_CMC];
+GO
+
+IF COL_LENGTH('dbo.KHEN_THUONG_KY_LUAT', 'Trang_thai') IS NULL
+BEGIN
+    ALTER TABLE dbo.KHEN_THUONG_KY_LUAT
+    ADD Trang_thai NVARCHAR(30) NOT NULL
+        CONSTRAINT DF_KTKL_TrangThai DEFAULT N'Đã duyệt';
+END
+GO
+
+IF COL_LENGTH('dbo.KHEN_THUONG_KY_LUAT', 'Nguoi_tao') IS NULL
+BEGIN
+    ALTER TABLE dbo.KHEN_THUONG_KY_LUAT
+    ADD Nguoi_tao INT NULL;
+END
+GO
+
+IF COL_LENGTH('dbo.KHEN_THUONG_KY_LUAT', 'Nguoi_duyet') IS NULL
+BEGIN
+    ALTER TABLE dbo.KHEN_THUONG_KY_LUAT
+    ADD Nguoi_duyet INT NULL;
+END
+GO
+
+IF COL_LENGTH('dbo.KHEN_THUONG_KY_LUAT', 'Ngay_duyet') IS NULL
+BEGIN
+    ALTER TABLE dbo.KHEN_THUONG_KY_LUAT
+    ADD Ngay_duyet DATETIME NULL;
+END
+GO
+
+IF COL_LENGTH('dbo.KHEN_THUONG_KY_LUAT', 'Ly_do_duyet') IS NULL
+BEGIN
+    ALTER TABLE dbo.KHEN_THUONG_KY_LUAT
+    ADD Ly_do_duyet NVARCHAR(255) NULL;
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1
+    FROM sys.indexes
+    WHERE name = 'IX_KTKL_TrangThai_NgayLap'
+      AND object_id = OBJECT_ID('dbo.KHEN_THUONG_KY_LUAT')
+)
+BEGIN
+    CREATE INDEX IX_KTKL_TrangThai_NgayLap
+    ON dbo.KHEN_THUONG_KY_LUAT (Trang_thai, Ngay_lap, Ma_nhan_vien);
+END
+GO
