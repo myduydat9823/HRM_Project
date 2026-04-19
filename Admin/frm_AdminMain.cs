@@ -65,7 +65,7 @@ namespace QuanLyNhanSu
         private void btnHeThong_Click(object sender, EventArgs e)
         {
             // Đổi frm_HeThong thành tên form hệ thống thật của bạn
-            OpenChildForm(new frm_DanhSachNV(), "Hệ thống");
+            OpenChildForm(new frmCapTaiKhoan (), "Cấp tài khoản");
         }
 
         private void btnDangXuat_Click(object sender, EventArgs e)
