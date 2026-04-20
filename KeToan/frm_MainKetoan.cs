@@ -86,5 +86,10 @@ namespace QuanLyNhanSu.KeToan
         {
             OpenChildForm(new frmLuongNhanVienKeToan(), "Lương");
         }
+
+        private void btnThongBao_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

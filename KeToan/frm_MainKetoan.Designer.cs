@@ -32,9 +32,6 @@
             this.pnlTop = new System.Windows.Forms.Panel();
             this.lblHeader = new System.Windows.Forms.Label();
             this.pnlMenu = new System.Windows.Forms.Panel();
-            this.btnThongBao = new System.Windows.Forms.Button();
-            this.btn_NghiPhep = new System.Windows.Forms.Button();
-            this.btn_ChiTietChamCong = new System.Windows.Forms.Button();
             this.btnDangXuat = new System.Windows.Forms.Button();
             this.btnLuong = new System.Windows.Forms.Button();
             this.btnDuyetThuongPhat = new System.Windows.Forms.Button();
@@ -82,9 +79,6 @@
             // pnlMenu
             // 
             this.pnlMenu.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(41)))), ((int)(((byte)(53)))), ((int)(((byte)(65)))));
-            this.pnlMenu.Controls.Add(this.btnThongBao);
-            this.pnlMenu.Controls.Add(this.btn_NghiPhep);
-            this.pnlMenu.Controls.Add(this.btn_ChiTietChamCong);
             this.pnlMenu.Controls.Add(this.btnDangXuat);
             this.pnlMenu.Controls.Add(this.btnLuong);
             this.pnlMenu.Controls.Add(this.btnDuyetThuongPhat);
@@ -96,54 +90,6 @@
             this.pnlMenu.Name = "pnlMenu";
             this.pnlMenu.Size = new System.Drawing.Size(220, 604);
             this.pnlMenu.TabIndex = 6;
-            // 
-            // btnThongBao
-            // 
-            this.btnThongBao.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnThongBao.FlatAppearance.BorderSize = 0;
-            this.btnThongBao.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnThongBao.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.btnThongBao.ForeColor = System.Drawing.Color.White;
-            this.btnThongBao.Location = new System.Drawing.Point(0, 460);
-            this.btnThongBao.Name = "btnThongBao";
-            this.btnThongBao.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
-            this.btnThongBao.Size = new System.Drawing.Size(220, 53);
-            this.btnThongBao.TabIndex = 7;
-            this.btnThongBao.Text = "Thông Báo";
-            this.btnThongBao.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnThongBao.UseVisualStyleBackColor = true;
-            // 
-            // btn_NghiPhep
-            // 
-            this.btn_NghiPhep.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_NghiPhep.FlatAppearance.BorderSize = 0;
-            this.btn_NghiPhep.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_NghiPhep.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.btn_NghiPhep.ForeColor = System.Drawing.Color.White;
-            this.btn_NghiPhep.Location = new System.Drawing.Point(0, 400);
-            this.btn_NghiPhep.Name = "btn_NghiPhep";
-            this.btn_NghiPhep.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
-            this.btn_NghiPhep.Size = new System.Drawing.Size(220, 60);
-            this.btn_NghiPhep.TabIndex = 6;
-            this.btn_NghiPhep.Text = "Làm Đơn Nghĩ Phép";
-            this.btn_NghiPhep.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_NghiPhep.UseVisualStyleBackColor = true;
-            // 
-            // btn_ChiTietChamCong
-            // 
-            this.btn_ChiTietChamCong.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btn_ChiTietChamCong.FlatAppearance.BorderSize = 0;
-            this.btn_ChiTietChamCong.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_ChiTietChamCong.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.btn_ChiTietChamCong.ForeColor = System.Drawing.Color.White;
-            this.btn_ChiTietChamCong.Location = new System.Drawing.Point(0, 340);
-            this.btn_ChiTietChamCong.Name = "btn_ChiTietChamCong";
-            this.btn_ChiTietChamCong.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
-            this.btn_ChiTietChamCong.Size = new System.Drawing.Size(220, 60);
-            this.btn_ChiTietChamCong.TabIndex = 5;
-            this.btn_ChiTietChamCong.Text = "Chi Tiết Chấm Công";
-            this.btn_ChiTietChamCong.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_ChiTietChamCong.UseVisualStyleBackColor = true;
             // 
             // btnDangXuat
             // 
@@ -274,9 +220,6 @@
         private System.Windows.Forms.Panel pnlTop;
         private System.Windows.Forms.Label lblHeader;
         private System.Windows.Forms.Panel pnlMenu;
-        private System.Windows.Forms.Button btnThongBao;
-        private System.Windows.Forms.Button btn_NghiPhep;
-        private System.Windows.Forms.Button btn_ChiTietChamCong;
         private System.Windows.Forms.Button btnDangXuat;
         private System.Windows.Forms.Button btnLuong;
         private System.Windows.Forms.Button btnDuyetThuongPhat;

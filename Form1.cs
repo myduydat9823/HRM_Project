@@ -21,7 +21,6 @@ namespace QuanLyNhanSu
         public Form1()
         {
             InitializeComponent();
-
         }
 
 
