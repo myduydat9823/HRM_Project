@@ -211,6 +211,29 @@ namespace QuanLyNhanSu.DAL
             }
         }
 
+        public bool ChangePassword(string taiKhoan, string matKhauCuHash, string matKhauMoiHash)
+        {
+            using (SqlConnection conn = DbConnectionFactory.CreateConnection())
+            {
+                conn.Open();
+
+                string query = @"
+                    UPDATE TAI_KHOAN
+                    SET Mat_khau = @Mat_khau_moi
+                    WHERE Tai_khoan = @Tai_khoan
+                      AND Mat_khau = @Mat_khau_cu";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Tai_khoan", taiKhoan);
+                    cmd.Parameters.AddWithValue("@Mat_khau_cu", matKhauCuHash);
+                    cmd.Parameters.AddWithValue("@Mat_khau_moi", matKhauMoiHash);
+
+                    return cmd.ExecuteNonQuery() > 0;
+                }
+            }
+        }
+
         private int GetNextAccountId(SqlConnection conn, SqlTransaction tran)
         {
             string query = @"

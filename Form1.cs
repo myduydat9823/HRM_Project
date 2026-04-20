@@ -85,19 +85,9 @@ namespace QuanLyNhanSu
 
         private void guna2Button2_Click(object sender, EventArgs e)
         {
-            using (SqlConnection conn = DbConnectionFactory.CreateConnection())
-
+            using (frmDoiMatKhau frm = new frmDoiMatKhau())
             {
-                conn.Open();
-
-                string matKhauHash = PasswordHelper.HashPassword("123456");
-
-                string query = "UPDATE TAI_KHOAN SET Mat_khau = @Mat_khau";
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@Mat_khau", matKhauHash);
-                    cmd.ExecuteNonQuery();
-                }
+                frm.ShowDialog(this);
             }
         }
     }

@@ -89,6 +89,59 @@ namespace QuanLyNhanSu.BLL
             };
         }
 
+        public OperationResultDto ChangePassword(string taiKhoan, string matKhauCu, string matKhauMoi)
+        {
+            taiKhoan = taiKhoan == null ? "" : taiKhoan.Trim();
+            matKhauCu = matKhauCu == null ? "" : matKhauCu.Trim();
+            matKhauMoi = matKhauMoi == null ? "" : matKhauMoi.Trim();
+
+            if (string.IsNullOrWhiteSpace(taiKhoan))
+            {
+                return Fail("Vui lòng nhập tài khoản.");
+            }
+
+            if (taiKhoan.Contains(" "))
+            {
+                return Fail("Tài khoản không được chứa khoảng trắng.");
+            }
+
+            if (string.IsNullOrWhiteSpace(matKhauCu))
+            {
+                return Fail("Vui lòng nhập mật khẩu hiện tại.");
+            }
+
+            if (string.IsNullOrWhiteSpace(matKhauMoi))
+            {
+                return Fail("Vui lòng nhập mật khẩu mới.");
+            }
+
+            if (matKhauMoi.Length < 6)
+            {
+                return Fail("Mật khẩu mới phải có ít nhất 6 ký tự.");
+            }
+
+            if (matKhauCu == matKhauMoi)
+            {
+                return Fail("Mật khẩu mới không được trùng mật khẩu hiện tại.");
+            }
+
+            string matKhauCuHash = PasswordHelper.HashPassword(matKhauCu);
+            string matKhauMoiHash = PasswordHelper.HashPassword(matKhauMoi);
+
+            bool changed = taiKhoanDAL.ChangePassword(taiKhoan, matKhauCuHash, matKhauMoiHash);
+
+            if (!changed)
+            {
+                return Fail("Tài khoản hoặc mật khẩu hiện tại không đúng.");
+            }
+
+            return new OperationResultDto
+            {
+                Success = true,
+                Message = "Đổi mật khẩu thành công."
+            };
+        }
+
         private OperationResultDto Fail(string message)
         {
             return new OperationResultDto

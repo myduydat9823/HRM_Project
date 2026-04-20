@@ -90,7 +90,7 @@
             this.guna2Button2.Name = "guna2Button2";
             this.guna2Button2.Size = new System.Drawing.Size(419, 45);
             this.guna2Button2.TabIndex = 5;
-            this.guna2Button2.Text = "Quên mật khẩu";
+            this.guna2Button2.Text = "Đổi mật khẩu";
             this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click);
             // 
             // btnDangNhap
