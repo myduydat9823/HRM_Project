@@ -4,13 +4,12 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
 
+using QuanLyNhanSu.Common;
+
 namespace QuanLyNhanSu.Admin.NghiPhep
 {
     public partial class frmDuyetDonNghiPhep : Form
     {
-        private readonly string connectString =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
-
         private bool isProcessing = false;
 
         public frmDuyetDonNghiPhep()
@@ -52,7 +51,7 @@ namespace QuanLyNhanSu.Admin.NghiPhep
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -195,7 +194,7 @@ namespace QuanLyNhanSu.Admin.NghiPhep
                     return;
                 }
 
-                conn = new SqlConnection(connectString);
+                conn = DbConnectionFactory.CreateConnection();
                 conn.Open();
                 tran = conn.BeginTransaction();
 

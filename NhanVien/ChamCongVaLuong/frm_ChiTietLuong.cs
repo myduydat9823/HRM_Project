@@ -4,13 +4,12 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
 
+using QuanLyNhanSu.Common;
+
 namespace QuanLyNhanSu.NhanVien.ChamCongVaLuong 
 {
     public partial class frm_ChiTietLuong : Form
     {
-        private readonly string connectString =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
-
         public frm_ChiTietLuong()
         {
             InitializeComponent();
@@ -33,7 +32,7 @@ namespace QuanLyNhanSu.NhanVien.ChamCongVaLuong
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -100,7 +99,7 @@ namespace QuanLyNhanSu.NhanVien.ChamCongVaLuong
                 if (cmbThang.SelectedItem == null || cmbNam.SelectedItem == null)
                     return;
 
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 

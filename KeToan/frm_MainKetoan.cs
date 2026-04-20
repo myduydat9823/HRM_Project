@@ -91,5 +91,10 @@ namespace QuanLyNhanSu.KeToan
         {
 
         }
+
+        private void frm_MainKetoan_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

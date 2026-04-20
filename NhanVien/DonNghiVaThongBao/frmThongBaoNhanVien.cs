@@ -4,13 +4,12 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
 
+using QuanLyNhanSu.Common;
+
 namespace QuanLyNhanSu.NhanVien.DonNghiVaThongBao
 {
     public partial class frmThongBaoNhanVien : Form
     {
-        private readonly string connectString =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
-
         public frmThongBaoNhanVien()
         {
             InitializeComponent();
@@ -30,7 +29,7 @@ namespace QuanLyNhanSu.NhanVien.DonNghiVaThongBao
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -116,7 +115,7 @@ namespace QuanLyNhanSu.NhanVien.DonNghiVaThongBao
 
                 int maThongBao = Convert.ToInt32(dataGridViewThongBao.CurrentRow.Cells["Ma_thong_bao"].Value);
 
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 

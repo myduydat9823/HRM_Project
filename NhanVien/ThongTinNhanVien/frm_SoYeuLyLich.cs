@@ -6,13 +6,12 @@ using System.IO;
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
 
+using QuanLyNhanSu.Common;
+
 namespace QuanLyNhanSu.NhanVien.ThongTinNhanVien
 {
     public partial class frm_SoYeuLyLich : Form
     {
-        private string connectString =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
-
         public frm_SoYeuLyLich()
         {
             InitializeComponent();
@@ -32,7 +31,7 @@ namespace QuanLyNhanSu.NhanVien.ThongTinNhanVien
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
                     string query = "SELECT Ma_phong_ban, Ten_phong_ban FROM PHONG_BAN ORDER BY Ten_phong_ban";
@@ -57,7 +56,7 @@ namespace QuanLyNhanSu.NhanVien.ThongTinNhanVien
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
                     string query = "SELECT Ma_chuc_vu, Ten_chuc_vu FROM CHUC_VU ORDER BY Ten_chuc_vu";
@@ -124,7 +123,7 @@ namespace QuanLyNhanSu.NhanVien.ThongTinNhanVien
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 

@@ -50,7 +50,7 @@
             this.pnlContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContent.Location = new System.Drawing.Point(220, 60);
             this.pnlContent.Name = "pnlContent";
-            this.pnlContent.Size = new System.Drawing.Size(1267, 544);
+            this.pnlContent.Size = new System.Drawing.Size(1664, 981);
             this.pnlContent.TabIndex = 8;
             // 
             // pnlTop
@@ -60,7 +60,7 @@
             this.pnlTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlTop.Location = new System.Drawing.Point(220, 0);
             this.pnlTop.Name = "pnlTop";
-            this.pnlTop.Size = new System.Drawing.Size(1267, 60);
+            this.pnlTop.Size = new System.Drawing.Size(1664, 60);
             this.pnlTop.TabIndex = 7;
             // 
             // lblHeader
@@ -71,7 +71,7 @@
             this.lblHeader.Location = new System.Drawing.Point(0, 0);
             this.lblHeader.Name = "lblHeader";
             this.lblHeader.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.lblHeader.Size = new System.Drawing.Size(1267, 60);
+            this.lblHeader.Size = new System.Drawing.Size(1664, 60);
             this.lblHeader.TabIndex = 0;
             this.lblHeader.Text = "Trang chủ";
             this.lblHeader.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -88,7 +88,7 @@
             this.pnlMenu.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlMenu.Location = new System.Drawing.Point(0, 0);
             this.pnlMenu.Name = "pnlMenu";
-            this.pnlMenu.Size = new System.Drawing.Size(220, 604);
+            this.pnlMenu.Size = new System.Drawing.Size(220, 1041);
             this.pnlMenu.TabIndex = 6;
             // 
             // btnDangXuat
@@ -98,7 +98,7 @@
             this.btnDangXuat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnDangXuat.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.btnDangXuat.ForeColor = System.Drawing.Color.White;
-            this.btnDangXuat.Location = new System.Drawing.Point(0, 544);
+            this.btnDangXuat.Location = new System.Drawing.Point(0, 981);
             this.btnDangXuat.Name = "btnDangXuat";
             this.btnDangXuat.Padding = new System.Windows.Forms.Padding(15, 0, 0, 0);
             this.btnDangXuat.Size = new System.Drawing.Size(220, 60);
@@ -201,12 +201,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1487, 604);
+            this.ClientSize = new System.Drawing.Size(1884, 1041);
             this.Controls.Add(this.pnlContent);
             this.Controls.Add(this.pnlTop);
             this.Controls.Add(this.pnlMenu);
             this.Name = "frm_MainKetoan";
             this.Text = "frm_MainKetoan";
+            this.Load += new System.EventHandler(this.frm_MainKetoan_Load_1);
             this.pnlTop.ResumeLayout(false);
             this.pnlMenu.ResumeLayout(false);
             this.pnlLogo.ResumeLayout(false);

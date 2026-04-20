@@ -4,13 +4,12 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
 
+using QuanLyNhanSu.Common;
+
 namespace QuanLyNhanSu.KeToan.TinhLuong
 {
     public partial class frmLuongNhanVienKeToan : Form
     {
-        private readonly string connectString =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
-
         private bool isProcessing = false;
 
         public frmLuongNhanVienKeToan()
@@ -21,6 +20,7 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
             btnTinhLuong.Click += btnTinhLuong_Click;
             btnLoc.Click += btnLoc_Click;
             btnTaiLai.Click += btnTaiLai_Click;
+            btnXuatExcel.Click += btnXuatExcel_Click;
         }
 
         private void frmLuongNhanVienKeToan_Load(object sender, EventArgs e)
@@ -56,13 +56,14 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
             btnTinhLuong.Enabled = enabled;
             btnLoc.Enabled = enabled;
             btnTaiLai.Enabled = enabled;
+            btnXuatExcel.Enabled = enabled;
         }
 
         private void LoadEmployeeCombobox()
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -162,7 +163,7 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
                 if (result == DialogResult.No)
                     return;
 
-                conn = new SqlConnection(connectString);
+                conn = DbConnectionFactory.CreateConnection();
                 conn.Open();
 
                 tran = conn.BeginTransaction(IsolationLevel.Serializable);
@@ -457,7 +458,7 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
                 DateTime tuNgay = new DateTime(nam, thang, 1);
                 DateTime denNgay = tuNgay.AddMonths(1).AddDays(-1);
 
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -690,6 +691,52 @@ namespace QuanLyNhanSu.KeToan.TinhLuong
 
             LoadSalaryData();
             ConfigureDataGridView();
+        }
+
+        private void btnXuatExcel_Click(object sender, EventArgs e)
+        {
+            if (!HasSalaryPermission()) return;
+
+            int rowCount = 0;
+
+            foreach (DataGridViewRow row in dataGridViewLuong.Rows)
+            {
+                if (!row.IsNewRow)
+                    rowCount++;
+            }
+
+            if (rowCount == 0)
+            {
+                MessageBox.Show("Không có dữ liệu lương để xuất Excel.");
+                return;
+            }
+
+            string thang = cmbThang.SelectedItem == null ? DateTime.Now.Month.ToString() : cmbThang.SelectedItem.ToString();
+            string nam = cmbNam.SelectedItem == null ? DateTime.Now.Year.ToString() : cmbNam.SelectedItem.ToString();
+
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            {
+                saveFileDialog.Title = "Xuất bảng lương ra Excel";
+                saveFileDialog.Filter = "Excel Workbook (*.xlsx)|*.xlsx";
+                saveFileDialog.FileName = "BangLuong_Thang" + thang + "_Nam" + nam + ".xlsx";
+
+                if (saveFileDialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                try
+                {
+                    ExcelExportHelper.ExportDataGridViewToXlsx(
+                        dataGridViewLuong,
+                        saveFileDialog.FileName,
+                        "Bang luong");
+
+                    MessageBox.Show("Xuất Excel thành công:\n" + saveFileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi xuất Excel: " + ex.Message);
+                }
+            }
         }
     }
 }

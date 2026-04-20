@@ -19,6 +19,7 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.groupBoxBoLoc = new System.Windows.Forms.GroupBox();
             this.btnTaiLai = new System.Windows.Forms.Button();
+            this.btnXuatExcel = new System.Windows.Forms.Button();
             this.btnLoc = new System.Windows.Forms.Button();
             this.btnTinhLuong = new System.Windows.Forms.Button();
             this.cmbNam = new System.Windows.Forms.ComboBox();
@@ -53,6 +54,7 @@
             // groupBoxBoLoc
             // 
             this.groupBoxBoLoc.Controls.Add(this.btnTaiLai);
+            this.groupBoxBoLoc.Controls.Add(this.btnXuatExcel);
             this.groupBoxBoLoc.Controls.Add(this.btnLoc);
             this.groupBoxBoLoc.Controls.Add(this.btnTinhLuong);
             this.groupBoxBoLoc.Controls.Add(this.cmbNam);
@@ -72,19 +74,29 @@
             // btnTaiLai
             // 
             this.btnTaiLai.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnTaiLai.Location = new System.Drawing.Point(1055, 35);
+            this.btnTaiLai.Location = new System.Drawing.Point(965, 35);
             this.btnTaiLai.Name = "btnTaiLai";
-            this.btnTaiLai.Size = new System.Drawing.Size(120, 32);
+            this.btnTaiLai.Size = new System.Drawing.Size(90, 32);
             this.btnTaiLai.TabIndex = 8;
             this.btnTaiLai.Text = "Tải lại";
             this.btnTaiLai.UseVisualStyleBackColor = true;
             // 
+            // btnXuatExcel
+            // 
+            this.btnXuatExcel.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnXuatExcel.Location = new System.Drawing.Point(1070, 35);
+            this.btnXuatExcel.Name = "btnXuatExcel";
+            this.btnXuatExcel.Size = new System.Drawing.Size(105, 32);
+            this.btnXuatExcel.TabIndex = 9;
+            this.btnXuatExcel.Text = "Xuất Excel";
+            this.btnXuatExcel.UseVisualStyleBackColor = true;
+            // 
             // btnLoc
             // 
             this.btnLoc.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnLoc.Location = new System.Drawing.Point(915, 35);
+            this.btnLoc.Location = new System.Drawing.Point(865, 35);
             this.btnLoc.Name = "btnLoc";
-            this.btnLoc.Size = new System.Drawing.Size(120, 32);
+            this.btnLoc.Size = new System.Drawing.Size(85, 32);
             this.btnLoc.TabIndex = 7;
             this.btnLoc.Text = "Lọc";
             this.btnLoc.UseVisualStyleBackColor = true;
@@ -92,9 +104,9 @@
             // btnTinhLuong
             // 
             this.btnTinhLuong.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnTinhLuong.Location = new System.Drawing.Point(755, 35);
+            this.btnTinhLuong.Location = new System.Drawing.Point(730, 35);
             this.btnTinhLuong.Name = "btnTinhLuong";
-            this.btnTinhLuong.Size = new System.Drawing.Size(140, 32);
+            this.btnTinhLuong.Size = new System.Drawing.Size(120, 32);
             this.btnTinhLuong.TabIndex = 6;
             this.btnTinhLuong.Text = "Tính lương";
             this.btnTinhLuong.UseVisualStyleBackColor = true;
@@ -252,6 +264,7 @@
         private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.GroupBox groupBoxBoLoc;
         private System.Windows.Forms.Button btnTaiLai;
+        private System.Windows.Forms.Button btnXuatExcel;
         private System.Windows.Forms.Button btnLoc;
         private System.Windows.Forms.Button btnTinhLuong;
         private System.Windows.Forms.ComboBox cmbNam;

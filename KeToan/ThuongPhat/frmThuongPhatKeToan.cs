@@ -11,9 +11,6 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
         private const string TrangThaiChoDuyet = "Chờ duyệt";
         private const string TrangThaiDaDuyet = "Đã duyệt";
 
-        private readonly string connectString =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
-
         private bool isProcessing = false;
         private KetoanRoleInfo currentRole;
 
@@ -86,7 +83,7 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -173,7 +170,7 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -212,7 +209,7 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                 if (cmbThang.SelectedItem == null || cmbNam.SelectedItem == null)
                     return;
 
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -358,7 +355,7 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
             {
                 if (!ValidateInput()) return;
 
-                conn = new SqlConnection(connectString);
+                conn = DbConnectionFactory.CreateConnection();
                 conn.Open();
                 tran = conn.BeginTransaction(IsolationLevel.Serializable);
 
@@ -472,7 +469,7 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
                 bool duyetNgay = currentRole != null && currentRole.CanApproveRewardPenalty;
                 string trangThai = duyetNgay ? TrangThaiDaDuyet : TrangThaiChoDuyet;
 
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -557,7 +554,7 @@ namespace QuanLyNhanSu.KeToan.ThuongPhat
 
                 if (result == DialogResult.No) return;
 
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 

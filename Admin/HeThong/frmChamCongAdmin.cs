@@ -4,13 +4,12 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
 
+using QuanLyNhanSu.Common;
+
 namespace QuanLyNhanSu.Admin.HeThong
 {
     public partial class frmChamCongAdmin : Form
     {
-        private readonly string connectString =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
-
         public frmChamCongAdmin()
         {
             InitializeComponent();
@@ -40,7 +39,7 @@ namespace QuanLyNhanSu.Admin.HeThong
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -103,7 +102,7 @@ namespace QuanLyNhanSu.Admin.HeThong
                 if (cmbThang.SelectedItem == null || cmbNam.SelectedItem == null)
                     return;
 
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 

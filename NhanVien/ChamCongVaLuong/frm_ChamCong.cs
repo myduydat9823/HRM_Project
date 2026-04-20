@@ -3,13 +3,12 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
 
+using QuanLyNhanSu.Common;
+
 namespace QuanLyNhanSu.NhanVien.ChamCongVaLuong
 {
     public partial class frm_ChamCong : Form
     {
-        private readonly string connectString =
-            @"Data Source=ADMIN\PHANTAN1;Initial Catalog=QUAN_LY_NHAN_VIEN_CMC;Integrated Security=True;TrustServerCertificate=True";
-
         private readonly TimeSpan gioBatDauLam = new TimeSpan(8, 0, 0);
         private readonly TimeSpan gioTanLam = new TimeSpan(17, 0, 0);
 
@@ -33,7 +32,7 @@ namespace QuanLyNhanSu.NhanVien.ChamCongVaLuong
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -72,7 +71,7 @@ namespace QuanLyNhanSu.NhanVien.ChamCongVaLuong
         {
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -171,7 +170,7 @@ namespace QuanLyNhanSu.NhanVien.ChamCongVaLuong
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
@@ -274,7 +273,7 @@ END";
 
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectString))
+                using (SqlConnection conn = DbConnectionFactory.CreateConnection())
                 {
                     conn.Open();
 
