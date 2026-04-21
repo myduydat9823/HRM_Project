@@ -159,6 +159,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLuong)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitle;

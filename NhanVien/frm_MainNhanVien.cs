@@ -152,5 +152,19 @@ namespace QuanLyNhanSu.NhanVien
             OpenChildForm(new frmChiTietLuongNhanVien(), "Chi tiết lương");
         
         }
+
+        private void btnDangXuat_Click_1(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show(
+               "Bạn có chắc muốn đăng xuất không?",
+               "Xác nhận",
+               MessageBoxButtons.YesNo,
+               MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                this.Close();
+            }
+        }
     }
 }

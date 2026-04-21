@@ -65,9 +65,9 @@
             this.lableerorr.ForeColor = System.Drawing.Color.Red;
             this.lableerorr.Location = new System.Drawing.Point(657, 495);
             this.lableerorr.Name = "lableerorr";
-            this.lableerorr.Size = new System.Drawing.Size(255, 13);
+            this.lableerorr.Size = new System.Drawing.Size(0, 13);
             this.lableerorr.TabIndex = 7;
-            this.lableerorr.Text = "Tài khoản hoặc mật khẩu cảu bạn không chính xác";
+            this.lableerorr.Click += new System.EventHandler(this.lableerorr_Click);
             // 
             // label2
             // 

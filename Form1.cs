@@ -90,5 +90,10 @@ namespace QuanLyNhanSu
                 frm.ShowDialog(this);
             }
         }
+
+        private void lableerorr_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

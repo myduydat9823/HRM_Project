@@ -41,7 +41,7 @@
             // lblTitle
             // 
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.Location = new System.Drawing.Point(275, 20);
+            this.lblTitle.Location = new System.Drawing.Point(761, 49);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(360, 35);
             this.lblTitle.TabIndex = 0;
@@ -51,7 +51,7 @@
             // lblMaNhanVien
             // 
             this.lblMaNhanVien.AutoSize = true;
-            this.lblMaNhanVien.Location = new System.Drawing.Point(55, 95);
+            this.lblMaNhanVien.Location = new System.Drawing.Point(541, 124);
             this.lblMaNhanVien.Name = "lblMaNhanVien";
             this.lblMaNhanVien.Size = new System.Drawing.Size(72, 13);
             this.lblMaNhanVien.TabIndex = 1;
@@ -59,7 +59,7 @@
             // 
             // txtMaNhanVien
             // 
-            this.txtMaNhanVien.Location = new System.Drawing.Point(155, 92);
+            this.txtMaNhanVien.Location = new System.Drawing.Point(641, 121);
             this.txtMaNhanVien.Name = "txtMaNhanVien";
             this.txtMaNhanVien.ReadOnly = true;
             this.txtMaNhanVien.Size = new System.Drawing.Size(220, 20);
@@ -68,7 +68,7 @@
             // lblTenNhanVien
             // 
             this.lblTenNhanVien.AutoSize = true;
-            this.lblTenNhanVien.Location = new System.Drawing.Point(430, 95);
+            this.lblTenNhanVien.Location = new System.Drawing.Point(916, 124);
             this.lblTenNhanVien.Name = "lblTenNhanVien";
             this.lblTenNhanVien.Size = new System.Drawing.Size(76, 13);
             this.lblTenNhanVien.TabIndex = 3;
@@ -76,7 +76,7 @@
             // 
             // txtTenNhanVien
             // 
-            this.txtTenNhanVien.Location = new System.Drawing.Point(530, 92);
+            this.txtTenNhanVien.Location = new System.Drawing.Point(1016, 121);
             this.txtTenNhanVien.Name = "txtTenNhanVien";
             this.txtTenNhanVien.ReadOnly = true;
             this.txtTenNhanVien.Size = new System.Drawing.Size(250, 20);
@@ -85,7 +85,7 @@
             // lblChucVu
             // 
             this.lblChucVu.AutoSize = true;
-            this.lblChucVu.Location = new System.Drawing.Point(55, 135);
+            this.lblChucVu.Location = new System.Drawing.Point(541, 164);
             this.lblChucVu.Name = "lblChucVu";
             this.lblChucVu.Size = new System.Drawing.Size(47, 13);
             this.lblChucVu.TabIndex = 5;
@@ -93,7 +93,7 @@
             // 
             // txtChucVu
             // 
-            this.txtChucVu.Location = new System.Drawing.Point(155, 132);
+            this.txtChucVu.Location = new System.Drawing.Point(641, 161);
             this.txtChucVu.Name = "txtChucVu";
             this.txtChucVu.ReadOnly = true;
             this.txtChucVu.Size = new System.Drawing.Size(220, 20);
@@ -102,7 +102,7 @@
             // lblPhongBan
             // 
             this.lblPhongBan.AutoSize = true;
-            this.lblPhongBan.Location = new System.Drawing.Point(430, 135);
+            this.lblPhongBan.Location = new System.Drawing.Point(916, 164);
             this.lblPhongBan.Name = "lblPhongBan";
             this.lblPhongBan.Size = new System.Drawing.Size(59, 13);
             this.lblPhongBan.TabIndex = 7;
@@ -110,7 +110,7 @@
             // 
             // txtPhongBan
             // 
-            this.txtPhongBan.Location = new System.Drawing.Point(530, 132);
+            this.txtPhongBan.Location = new System.Drawing.Point(1016, 161);
             this.txtPhongBan.Name = "txtPhongBan";
             this.txtPhongBan.ReadOnly = true;
             this.txtPhongBan.Size = new System.Drawing.Size(250, 20);
@@ -119,7 +119,7 @@
             // lblNgayLap
             // 
             this.lblNgayLap.AutoSize = true;
-            this.lblNgayLap.Location = new System.Drawing.Point(55, 175);
+            this.lblNgayLap.Location = new System.Drawing.Point(541, 204);
             this.lblNgayLap.Name = "lblNgayLap";
             this.lblNgayLap.Size = new System.Drawing.Size(49, 13);
             this.lblNgayLap.TabIndex = 9;
@@ -129,7 +129,7 @@
             // 
             this.dtpNgayLap.Enabled = false;
             this.dtpNgayLap.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpNgayLap.Location = new System.Drawing.Point(155, 172);
+            this.dtpNgayLap.Location = new System.Drawing.Point(641, 201);
             this.dtpNgayLap.Name = "dtpNgayLap";
             this.dtpNgayLap.Size = new System.Drawing.Size(220, 20);
             this.dtpNgayLap.TabIndex = 10;
@@ -137,16 +137,16 @@
             // lblNgayBatDau
             // 
             this.lblNgayBatDau.AutoSize = true;
-            this.lblNgayBatDau.Location = new System.Drawing.Point(55, 215);
+            this.lblNgayBatDau.Location = new System.Drawing.Point(541, 244);
             this.lblNgayBatDau.Name = "lblNgayBatDau";
-            this.lblNgayBatDau.Size = new System.Drawing.Size(74, 13);
+            this.lblNgayBatDau.Size = new System.Drawing.Size(72, 13);
             this.lblNgayBatDau.TabIndex = 11;
             this.lblNgayBatDau.Text = "Ngày bắt đầu";
             // 
             // dtpNgayBatDau
             // 
             this.dtpNgayBatDau.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpNgayBatDau.Location = new System.Drawing.Point(155, 212);
+            this.dtpNgayBatDau.Location = new System.Drawing.Point(641, 241);
             this.dtpNgayBatDau.Name = "dtpNgayBatDau";
             this.dtpNgayBatDau.Size = new System.Drawing.Size(220, 20);
             this.dtpNgayBatDau.TabIndex = 12;
@@ -154,16 +154,16 @@
             // lblNgayKetThuc
             // 
             this.lblNgayKetThuc.AutoSize = true;
-            this.lblNgayKetThuc.Location = new System.Drawing.Point(430, 215);
+            this.lblNgayKetThuc.Location = new System.Drawing.Point(916, 244);
             this.lblNgayKetThuc.Name = "lblNgayKetThuc";
-            this.lblNgayKetThuc.Size = new System.Drawing.Size(77, 13);
+            this.lblNgayKetThuc.Size = new System.Drawing.Size(74, 13);
             this.lblNgayKetThuc.TabIndex = 13;
             this.lblNgayKetThuc.Text = "Ngày kết thúc";
             // 
             // dtpNgayKetThuc
             // 
             this.dtpNgayKetThuc.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpNgayKetThuc.Location = new System.Drawing.Point(530, 212);
+            this.dtpNgayKetThuc.Location = new System.Drawing.Point(1016, 241);
             this.dtpNgayKetThuc.Name = "dtpNgayKetThuc";
             this.dtpNgayKetThuc.Size = new System.Drawing.Size(250, 20);
             this.dtpNgayKetThuc.TabIndex = 14;
@@ -171,15 +171,15 @@
             // lblLyDo
             // 
             this.lblLyDo.AutoSize = true;
-            this.lblLyDo.Location = new System.Drawing.Point(55, 260);
+            this.lblLyDo.Location = new System.Drawing.Point(541, 289);
             this.lblLyDo.Name = "lblLyDo";
-            this.lblLyDo.Size = new System.Drawing.Size(35, 13);
+            this.lblLyDo.Size = new System.Drawing.Size(33, 13);
             this.lblLyDo.TabIndex = 15;
             this.lblLyDo.Text = "Lý do";
             // 
             // txtLyDo
             // 
-            this.txtLyDo.Location = new System.Drawing.Point(155, 257);
+            this.txtLyDo.Location = new System.Drawing.Point(641, 286);
             this.txtLyDo.Multiline = true;
             this.txtLyDo.Name = "txtLyDo";
             this.txtLyDo.Size = new System.Drawing.Size(625, 110);
@@ -188,7 +188,7 @@
             // lblTinhTrang
             // 
             this.lblTinhTrang.AutoSize = true;
-            this.lblTinhTrang.Location = new System.Drawing.Point(55, 390);
+            this.lblTinhTrang.Location = new System.Drawing.Point(541, 419);
             this.lblTinhTrang.Name = "lblTinhTrang";
             this.lblTinhTrang.Size = new System.Drawing.Size(55, 13);
             this.lblTinhTrang.TabIndex = 17;
@@ -196,7 +196,7 @@
             // 
             // txtTinhTrang
             // 
-            this.txtTinhTrang.Location = new System.Drawing.Point(155, 387);
+            this.txtTinhTrang.Location = new System.Drawing.Point(641, 416);
             this.txtTinhTrang.Name = "txtTinhTrang";
             this.txtTinhTrang.ReadOnly = true;
             this.txtTinhTrang.Size = new System.Drawing.Size(220, 20);
@@ -205,7 +205,7 @@
             // btnXacNhan
             // 
             this.btnXacNhan.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.btnXacNhan.Location = new System.Drawing.Point(220, 450);
+            this.btnXacNhan.Location = new System.Drawing.Point(706, 479);
             this.btnXacNhan.Name = "btnXacNhan";
             this.btnXacNhan.Size = new System.Drawing.Size(150, 40);
             this.btnXacNhan.TabIndex = 19;
@@ -215,7 +215,7 @@
             // btnLamMoi
             // 
             this.btnLamMoi.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.btnLamMoi.Location = new System.Drawing.Point(420, 450);
+            this.btnLamMoi.Location = new System.Drawing.Point(906, 479);
             this.btnLamMoi.Name = "btnLamMoi";
             this.btnLamMoi.Size = new System.Drawing.Size(150, 40);
             this.btnLamMoi.TabIndex = 20;
@@ -226,7 +226,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(860, 560);
+            this.ClientSize = new System.Drawing.Size(1884, 1041);
             this.Controls.Add(this.btnLamMoi);
             this.Controls.Add(this.btnXacNhan);
             this.Controls.Add(this.txtTinhTrang);
@@ -253,6 +253,7 @@
             this.Text = "Đơn nghỉ phép nhân viên";
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitle;

@@ -69,69 +69,38 @@
             // 
             this.gbAnh.Controls.Add(this.btnThemAnh);
             this.gbAnh.Controls.Add(this.pictureBoxAnh);
-            this.gbAnh.Location = new System.Drawing.Point(1313, 47);
+            this.gbAnh.Location = new System.Drawing.Point(25, 36);
             this.gbAnh.Name = "gbAnh";
-            this.gbAnh.Size = new System.Drawing.Size(220, 230);
+            this.gbAnh.Size = new System.Drawing.Size(294, 257);
             this.gbAnh.TabIndex = 56;
             this.gbAnh.TabStop = false;
             this.gbAnh.Text = "Ảnh nhân viên";
             // 
             // btnThemAnh
             // 
-            this.btnThemAnh.Location = new System.Drawing.Point(61, 186);
+            this.btnThemAnh.Location = new System.Drawing.Point(77, 208);
             this.btnThemAnh.Name = "btnThemAnh";
             this.btnThemAnh.Size = new System.Drawing.Size(100, 30);
             this.btnThemAnh.TabIndex = 1;
             this.btnThemAnh.Text = "Thêm ảnh";
             this.btnThemAnh.UseVisualStyleBackColor = true;
+            this.btnThemAnh.Click += new System.EventHandler(this.btnThemAnh_Click);
             // 
             // pictureBoxAnh
             // 
             this.pictureBoxAnh.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxAnh.Location = new System.Drawing.Point(31, 19);
+            this.pictureBoxAnh.Location = new System.Drawing.Point(51, 19);
             this.pictureBoxAnh.Name = "pictureBoxAnh";
-            this.pictureBoxAnh.Size = new System.Drawing.Size(160, 150);
+            this.pictureBoxAnh.Size = new System.Drawing.Size(199, 177);
             this.pictureBoxAnh.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBoxAnh.TabIndex = 0;
             this.pictureBoxAnh.TabStop = false;
-            // 
-            // txtTenNganHang
-            // 
-            this.txtTenNganHang.Location = new System.Drawing.Point(140, 321);
-            this.txtTenNganHang.Name = "txtTenNganHang";
-            this.txtTenNganHang.Size = new System.Drawing.Size(180, 20);
-            this.txtTenNganHang.TabIndex = 60;
-            // 
-            // lblTenNganHang
-            // 
-            this.lblTenNganHang.AutoSize = true;
-            this.lblTenNganHang.Location = new System.Drawing.Point(37, 324);
-            this.lblTenNganHang.Name = "lblTenNganHang";
-            this.lblTenNganHang.Size = new System.Drawing.Size(80, 13);
-            this.lblTenNganHang.TabIndex = 59;
-            this.lblTenNganHang.Text = "Tên ngân hàng";
-            // 
-            // txtSoTaiKhoan
-            // 
-            this.txtSoTaiKhoan.Location = new System.Drawing.Point(140, 286);
-            this.txtSoTaiKhoan.Name = "txtSoTaiKhoan";
-            this.txtSoTaiKhoan.Size = new System.Drawing.Size(180, 20);
-            this.txtSoTaiKhoan.TabIndex = 58;
-            // 
-            // lblSoTaiKhoan
-            // 
-            this.lblSoTaiKhoan.AutoSize = true;
-            this.lblSoTaiKhoan.Location = new System.Drawing.Point(53, 289);
-            this.lblSoTaiKhoan.Name = "lblSoTaiKhoan";
-            this.lblSoTaiKhoan.Size = new System.Drawing.Size(67, 13);
-            this.lblSoTaiKhoan.TabIndex = 57;
-            this.lblSoTaiKhoan.Text = "Số tài khoản";
             // 
             // cmbStatus
             // 
             this.cmbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbStatus.FormattingEnabled = true;
-            this.cmbStatus.Location = new System.Drawing.Point(991, 208);
+            this.cmbStatus.Location = new System.Drawing.Point(1330, 215);
             this.cmbStatus.Name = "cmbStatus";
             this.cmbStatus.Size = new System.Drawing.Size(180, 21);
             this.cmbStatus.TabIndex = 55;
@@ -139,7 +108,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(912, 212);
+            this.lblStatus.Location = new System.Drawing.Point(1251, 219);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(55, 13);
             this.lblStatus.TabIndex = 54;
@@ -147,7 +116,7 @@
             // 
             // txtLuongCoBan
             // 
-            this.txtLuongCoBan.Location = new System.Drawing.Point(991, 173);
+            this.txtLuongCoBan.Location = new System.Drawing.Point(1330, 180);
             this.txtLuongCoBan.Name = "txtLuongCoBan";
             this.txtLuongCoBan.Size = new System.Drawing.Size(180, 20);
             this.txtLuongCoBan.TabIndex = 53;
@@ -155,17 +124,49 @@
             // lblLuongCoBan
             // 
             this.lblLuongCoBan.AutoSize = true;
-            this.lblLuongCoBan.Location = new System.Drawing.Point(912, 176);
+            this.lblLuongCoBan.Location = new System.Drawing.Point(1251, 183);
             this.lblLuongCoBan.Name = "lblLuongCoBan";
             this.lblLuongCoBan.Size = new System.Drawing.Size(73, 13);
             this.lblLuongCoBan.TabIndex = 52;
             this.lblLuongCoBan.Text = "Lương cơ bản";
             // 
+            // txtTenNganHang
+            // 
+            this.txtTenNganHang.Location = new System.Drawing.Point(479, 328);
+            this.txtTenNganHang.Name = "txtTenNganHang";
+            this.txtTenNganHang.Size = new System.Drawing.Size(180, 20);
+            this.txtTenNganHang.TabIndex = 60;
+            // 
+            // lblTenNganHang
+            // 
+            this.lblTenNganHang.AutoSize = true;
+            this.lblTenNganHang.Location = new System.Drawing.Point(376, 331);
+            this.lblTenNganHang.Name = "lblTenNganHang";
+            this.lblTenNganHang.Size = new System.Drawing.Size(80, 13);
+            this.lblTenNganHang.TabIndex = 59;
+            this.lblTenNganHang.Text = "Tên ngân hàng";
+            // 
+            // txtSoTaiKhoan
+            // 
+            this.txtSoTaiKhoan.Location = new System.Drawing.Point(479, 293);
+            this.txtSoTaiKhoan.Name = "txtSoTaiKhoan";
+            this.txtSoTaiKhoan.Size = new System.Drawing.Size(180, 20);
+            this.txtSoTaiKhoan.TabIndex = 58;
+            // 
+            // lblSoTaiKhoan
+            // 
+            this.lblSoTaiKhoan.AutoSize = true;
+            this.lblSoTaiKhoan.Location = new System.Drawing.Point(392, 296);
+            this.lblSoTaiKhoan.Name = "lblSoTaiKhoan";
+            this.lblSoTaiKhoan.Size = new System.Drawing.Size(67, 13);
+            this.lblSoTaiKhoan.TabIndex = 57;
+            this.lblSoTaiKhoan.Text = "Số tài khoản";
+            // 
             // cmbPosition
             // 
             this.cmbPosition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbPosition.FormattingEnabled = true;
-            this.cmbPosition.Location = new System.Drawing.Point(991, 138);
+            this.cmbPosition.Location = new System.Drawing.Point(1330, 145);
             this.cmbPosition.Name = "cmbPosition";
             this.cmbPosition.Size = new System.Drawing.Size(180, 21);
             this.cmbPosition.TabIndex = 51;
@@ -173,7 +174,7 @@
             // lblPosition
             // 
             this.lblPosition.AutoSize = true;
-            this.lblPosition.Location = new System.Drawing.Point(912, 142);
+            this.lblPosition.Location = new System.Drawing.Point(1251, 149);
             this.lblPosition.Name = "lblPosition";
             this.lblPosition.Size = new System.Drawing.Size(47, 13);
             this.lblPosition.TabIndex = 50;
@@ -183,7 +184,7 @@
             // 
             this.cmbDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbDepartment.FormattingEnabled = true;
-            this.cmbDepartment.Location = new System.Drawing.Point(991, 103);
+            this.cmbDepartment.Location = new System.Drawing.Point(1330, 110);
             this.cmbDepartment.Name = "cmbDepartment";
             this.cmbDepartment.Size = new System.Drawing.Size(180, 21);
             this.cmbDepartment.TabIndex = 49;
@@ -191,7 +192,7 @@
             // lblDepartment
             // 
             this.lblDepartment.AutoSize = true;
-            this.lblDepartment.Location = new System.Drawing.Point(912, 107);
+            this.lblDepartment.Location = new System.Drawing.Point(1251, 114);
             this.lblDepartment.Name = "lblDepartment";
             this.lblDepartment.Size = new System.Drawing.Size(59, 13);
             this.lblDepartment.TabIndex = 48;
@@ -200,7 +201,7 @@
             // dtpNgayVaoLam
             // 
             this.dtpNgayVaoLam.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpNgayVaoLam.Location = new System.Drawing.Point(990, 66);
+            this.dtpNgayVaoLam.Location = new System.Drawing.Point(1329, 73);
             this.dtpNgayVaoLam.Name = "dtpNgayVaoLam";
             this.dtpNgayVaoLam.Size = new System.Drawing.Size(180, 20);
             this.dtpNgayVaoLam.TabIndex = 47;
@@ -209,7 +210,7 @@
             // lblNgayVaoLam
             // 
             this.lblNgayVaoLam.AutoSize = true;
-            this.lblNgayVaoLam.Location = new System.Drawing.Point(912, 72);
+            this.lblNgayVaoLam.Location = new System.Drawing.Point(1251, 79);
             this.lblNgayVaoLam.Name = "lblNgayVaoLam";
             this.lblNgayVaoLam.Size = new System.Drawing.Size(72, 13);
             this.lblNgayVaoLam.TabIndex = 46;
@@ -217,7 +218,7 @@
             // 
             // txtAddress
             // 
-            this.txtAddress.Location = new System.Drawing.Point(140, 251);
+            this.txtAddress.Location = new System.Drawing.Point(479, 258);
             this.txtAddress.Name = "txtAddress";
             this.txtAddress.Size = new System.Drawing.Size(490, 20);
             this.txtAddress.TabIndex = 45;
@@ -225,7 +226,7 @@
             // lblAddress
             // 
             this.lblAddress.AutoSize = true;
-            this.lblAddress.Location = new System.Drawing.Point(53, 254);
+            this.lblAddress.Location = new System.Drawing.Point(392, 261);
             this.lblAddress.Name = "lblAddress";
             this.lblAddress.Size = new System.Drawing.Size(40, 13);
             this.lblAddress.TabIndex = 44;
@@ -233,7 +234,7 @@
             // 
             // txtEmail
             // 
-            this.txtEmail.Location = new System.Drawing.Point(140, 216);
+            this.txtEmail.Location = new System.Drawing.Point(479, 223);
             this.txtEmail.Name = "txtEmail";
             this.txtEmail.Size = new System.Drawing.Size(490, 20);
             this.txtEmail.TabIndex = 43;
@@ -241,7 +242,7 @@
             // lblEmail
             // 
             this.lblEmail.AutoSize = true;
-            this.lblEmail.Location = new System.Drawing.Point(53, 219);
+            this.lblEmail.Location = new System.Drawing.Point(392, 226);
             this.lblEmail.Name = "lblEmail";
             this.lblEmail.Size = new System.Drawing.Size(32, 13);
             this.lblEmail.TabIndex = 42;
@@ -249,7 +250,7 @@
             // 
             // txtPhone
             // 
-            this.txtPhone.Location = new System.Drawing.Point(140, 181);
+            this.txtPhone.Location = new System.Drawing.Point(479, 188);
             this.txtPhone.Name = "txtPhone";
             this.txtPhone.Size = new System.Drawing.Size(180, 20);
             this.txtPhone.TabIndex = 41;
@@ -257,7 +258,7 @@
             // lblPhone
             // 
             this.lblPhone.AutoSize = true;
-            this.lblPhone.Location = new System.Drawing.Point(53, 184);
+            this.lblPhone.Location = new System.Drawing.Point(392, 191);
             this.lblPhone.Name = "lblPhone";
             this.lblPhone.Size = new System.Drawing.Size(70, 13);
             this.lblPhone.TabIndex = 40;
@@ -265,7 +266,7 @@
             // 
             // txtCCCD
             // 
-            this.txtCCCD.Location = new System.Drawing.Point(140, 146);
+            this.txtCCCD.Location = new System.Drawing.Point(479, 153);
             this.txtCCCD.Name = "txtCCCD";
             this.txtCCCD.Size = new System.Drawing.Size(180, 20);
             this.txtCCCD.TabIndex = 39;
@@ -273,7 +274,7 @@
             // lblCCCD
             // 
             this.lblCCCD.AutoSize = true;
-            this.lblCCCD.Location = new System.Drawing.Point(53, 149);
+            this.lblCCCD.Location = new System.Drawing.Point(392, 156);
             this.lblCCCD.Name = "lblCCCD";
             this.lblCCCD.Size = new System.Drawing.Size(36, 13);
             this.lblCCCD.TabIndex = 38;
@@ -283,7 +284,7 @@
             // 
             this.cmbGender.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbGender.FormattingEnabled = true;
-            this.cmbGender.Location = new System.Drawing.Point(601, 107);
+            this.cmbGender.Location = new System.Drawing.Point(940, 114);
             this.cmbGender.Name = "cmbGender";
             this.cmbGender.Size = new System.Drawing.Size(180, 21);
             this.cmbGender.TabIndex = 37;
@@ -291,7 +292,7 @@
             // lblGender
             // 
             this.lblGender.AutoSize = true;
-            this.lblGender.Location = new System.Drawing.Point(522, 111);
+            this.lblGender.Location = new System.Drawing.Point(861, 118);
             this.lblGender.Name = "lblGender";
             this.lblGender.Size = new System.Drawing.Size(47, 13);
             this.lblGender.TabIndex = 36;
@@ -300,7 +301,7 @@
             // dtpBirthDate
             // 
             this.dtpBirthDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpBirthDate.Location = new System.Drawing.Point(601, 72);
+            this.dtpBirthDate.Location = new System.Drawing.Point(940, 79);
             this.dtpBirthDate.Name = "dtpBirthDate";
             this.dtpBirthDate.Size = new System.Drawing.Size(180, 20);
             this.dtpBirthDate.TabIndex = 35;
@@ -308,7 +309,7 @@
             // lblBirthDate
             // 
             this.lblBirthDate.AutoSize = true;
-            this.lblBirthDate.Location = new System.Drawing.Point(522, 76);
+            this.lblBirthDate.Location = new System.Drawing.Point(861, 83);
             this.lblBirthDate.Name = "lblBirthDate";
             this.lblBirthDate.Size = new System.Drawing.Size(54, 13);
             this.lblBirthDate.TabIndex = 34;
@@ -316,7 +317,7 @@
             // 
             // txtFullName
             // 
-            this.txtFullName.Location = new System.Drawing.Point(140, 111);
+            this.txtFullName.Location = new System.Drawing.Point(479, 118);
             this.txtFullName.Name = "txtFullName";
             this.txtFullName.Size = new System.Drawing.Size(180, 20);
             this.txtFullName.TabIndex = 33;
@@ -324,7 +325,7 @@
             // lblFullName
             // 
             this.lblFullName.AutoSize = true;
-            this.lblFullName.Location = new System.Drawing.Point(53, 114);
+            this.lblFullName.Location = new System.Drawing.Point(392, 121);
             this.lblFullName.Name = "lblFullName";
             this.lblFullName.Size = new System.Drawing.Size(54, 13);
             this.lblFullName.TabIndex = 32;
@@ -332,7 +333,7 @@
             // 
             // txtMaNhanVien
             // 
-            this.txtMaNhanVien.Location = new System.Drawing.Point(140, 76);
+            this.txtMaNhanVien.Location = new System.Drawing.Point(479, 83);
             this.txtMaNhanVien.Name = "txtMaNhanVien";
             this.txtMaNhanVien.ReadOnly = true;
             this.txtMaNhanVien.Size = new System.Drawing.Size(180, 20);
@@ -341,7 +342,7 @@
             // lblMaNhanVien
             // 
             this.lblMaNhanVien.AutoSize = true;
-            this.lblMaNhanVien.Location = new System.Drawing.Point(53, 79);
+            this.lblMaNhanVien.Location = new System.Drawing.Point(392, 86);
             this.lblMaNhanVien.Name = "lblMaNhanVien";
             this.lblMaNhanVien.Size = new System.Drawing.Size(72, 13);
             this.lblMaNhanVien.TabIndex = 30;

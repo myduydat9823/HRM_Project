@@ -226,5 +226,10 @@ namespace QuanLyNhanSu.NhanVien.ThongTinNhanVien
         {
 
         }
+
+        private void btnThemAnh_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

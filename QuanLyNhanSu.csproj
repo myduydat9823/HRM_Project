@@ -229,8 +229,14 @@
     <EmbeddedResource Include="KeToan\ThuongPhat\frmThuongPhatKeToan.resx">
       <DependentUpon>frmThuongPhatKeToan.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="NhanVien\ChamCongVaLuong\frmChiTietLuongNhanVien.resx">
+      <DependentUpon>frmChiTietLuongNhanVien.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="NhanVien\ChamCongVaLuong\frm_ChamCong.resx">
       <DependentUpon>frm_ChamCong.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NhanVien\DonNghiVaThongBao\frmDonNghiPhepNhanVien.resx">
+      <DependentUpon>frmDonNghiPhepNhanVien.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NhanVien\frm_MainNhanVien.resx">
       <DependentUpon>frm_MainNhanVien.cs</DependentUpon>
